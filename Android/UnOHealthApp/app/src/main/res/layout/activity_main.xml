@@ -4,15 +4,43 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@color/colorPrimary"
+    android:id="@+id/purpelContainer">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/titleLabelMain"
+
+        android:layout_marginLeft="30pt"
+        android:layout_marginRight="30pt"
+        android:text="Poll description"
+        android:textColor="@android:color/white"
+        android:textAlignment="center"
+        android:gravity="center"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constrainedHeight="true"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintHeight_max="50pt"
+        app:layout_constraintVertical_weight="1"
+        app:layout_constraintHeight_min="30pt"
+        app:layout_constraintHeight_default="wrap"/>
+
+    <ImageButton
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:id="@+id/main_arrow_button"
+        android:src="@drawable/arrow"
+        style="?android:attr/borderlessButtonStyle"
+        android:scaleType="fitCenter"
+
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/titleLabelMain"
+        app:layout_constraintRight_toLeftOf="@+id/titleLabelMain"
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
