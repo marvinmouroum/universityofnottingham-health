@@ -20,6 +20,7 @@ class GeneralFragment(layout:Int):Fragment() {
     }
 
     var layout:Int
+    var createdView:View? = null
 
     init {
         this.layout = layout
@@ -30,6 +31,11 @@ class GeneralFragment(layout:Int):Fragment() {
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         return inflater.inflate(this.layout, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        this.createdView = view
     }
 
 
