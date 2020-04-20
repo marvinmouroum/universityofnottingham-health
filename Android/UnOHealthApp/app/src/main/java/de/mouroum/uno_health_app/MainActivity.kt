@@ -17,9 +17,12 @@ import kotlinx.android.synthetic.main.question_container.*
 import java.lang.Thread.sleep
 import kotlin.concurrent.thread
 
+enum class AnswerType {
+    Boolean , MultipleChoice
+}
 class MainActivity : AppCompatActivity() {
 
-    var adapter:BaseAdapter? = null
+    private var adapter:MyAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +34,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     val fragment = GeneralFragment.newInstance(R.layout.question_container)
+
 
     fun openQuestion(){
         supportFragmentManager
@@ -48,16 +52,17 @@ class MainActivity : AppCompatActivity() {
             runOnUiThread {
 
                 fragment.view!!.findViewById<ListView>(R.id.answerList).adapter = adapter
+
                 fragment.view!!.findViewById<Button>(R.id.questionButton).setOnTouchListener { v, event ->
 
-                    if (event.action == MotionEvent.ACTION_DOWN){
-                        v.background = getDrawable(R.drawable.round_rect_violet)
+                        if (event.action == MotionEvent.ACTION_DOWN) {
+                            v.background = this@MainActivity.getDrawable(R.drawable.round_rect_violet)
+                        } else {
+                            v.background = this@MainActivity.getDrawable(R.drawable.round_rect_purple)
+                        }
+                        return@setOnTouchListener false
                     }
-                    else{
-                        v.background = getDrawable(R.drawable.round_rect_purple)
-                    }
-                    return@setOnTouchListener true
-                }
+
 
             }
         }
@@ -72,17 +77,32 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
 
+    fun uponClick(view:View){
+        if(adapter?.type == AnswerType.MultipleChoice){
+            adapter?.type = AnswerType.Boolean
+        }
+        else{
+            adapter?.type = AnswerType.MultipleChoice
+        }
+
+        adapter?.notifyDataSetChanged()
+    }
 
     private class MyAdapter(context: Context): BaseAdapter(){
 
         private val mContext: Context
+
+        var type:AnswerType = AnswerType.MultipleChoice
 
         init {
             mContext = context
         }
 
         override fun getCount(): Int {
-            return 3
+            when(type){
+                AnswerType.MultipleChoice -> return 3
+                AnswerType.Boolean -> return 1
+            }
         }
 
         override fun getItem(position: Int): Any {
@@ -91,25 +111,35 @@ class MainActivity : AppCompatActivity() {
 
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             val layoutInActivity = LayoutInflater.from(mContext)
-            val cell = layoutInActivity.inflate(R.layout.multiple_choice_question,parent,false)
 
-            cell.setOnClickListener {
+            when(type){
+                AnswerType.MultipleChoice -> {
+                    val cell = layoutInActivity.inflate(R.layout.multiple_choice_question,parent,false)
+                    cell.setOnClickListener {
 
-                var textview = it.findViewById<TextView>(R.id.answerTextview)
-                val constLayOut = textview.layoutParams as ConstraintLayout.LayoutParams
+                        var textview = it.findViewById<TextView>(R.id.answerTextview)
+                        val constLayOut = textview.layoutParams as ConstraintLayout.LayoutParams
 
-                if(constLayOut.leftMargin != 20){
-                    constLayOut.leftMargin   =  20
+                        if(constLayOut.leftMargin != 20){
+                            constLayOut.leftMargin   =  20
+                        }
+                        else{
+                            constLayOut.leftMargin   =  0
+                        }
+
+
+                        textview.layoutParams = constLayOut
+                    }
+                    return cell
                 }
-                else{
-                    constLayOut.leftMargin   =  0
+                AnswerType.Boolean -> {
+                    val cell = layoutInActivity.inflate(R.layout.boolean_choice_question,parent,false)
+                    return cell
                 }
-
-
-                textview.layoutParams = constLayOut
             }
 
-            return cell
+
+            return View(mContext)
         }
 
         override fun getItemId(position: Int): Long {
