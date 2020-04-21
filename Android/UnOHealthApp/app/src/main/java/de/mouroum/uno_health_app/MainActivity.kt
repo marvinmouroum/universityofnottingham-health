@@ -36,8 +36,6 @@ class MainActivity : AppCompatActivity() {
 
         var result = gson?.fromJson(basic_survey, Survey::class.java)
 
-        assert(result as? Question != null)
-
     }
 
     val fragment = GeneralFragment.newInstance(R.layout.question_container)
