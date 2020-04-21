@@ -1,0 +1,217 @@
+{
+  "id": 35,
+  "questions": [
+    {
+      "id": 5,
+      "question": "What is your age?",
+      "type": "CHOICE",
+      "order": 1,
+      "answers": [
+        {
+          "id": 1,
+          "value": "18 - 24"
+        },
+        {
+          "id": 2,
+          "value": "25 - 44"
+        },
+        {
+          "id": 3,
+          "value": "45 - 64"
+        },
+        {
+          "id": 4,
+          "value": "65 +"
+        }
+      ],
+      "defaultAnswer": null,
+      "multiple": false,
+      "container": null
+    },
+    {
+      "id": 8,
+      "question": "Gender?",
+      "type": "CHOICE",
+      "order": 2,
+      "answers": [
+        {
+          "id": 6,
+          "value": "Male"
+        },
+        {
+          "id": 7,
+          "value": "Female"
+        }
+      ],
+      "defaultAnswer": null,
+      "multiple": false,
+      "container": null
+    },
+    {
+      "id": 12,
+      "question": "What is your marital status?",
+      "type": "CHOICE",
+      "order": 3,
+      "answers": [
+        {
+          "id": 9,
+          "value": "Married or civil partnership"
+        },
+        {
+          "id": 10,
+          "value": "Living with partner"
+        },
+        {
+          "id": 11,
+          "value": "Single"
+        }
+      ],
+      "defaultAnswer": null,
+      "multiple": false,
+      "container": null
+    },
+    {
+      "id": 19,
+      "question": "Are you in employment?",
+      "type": "CHOICE",
+      "order": 4,
+      "answers": [
+        {
+          "id": 14,
+          "value": "Full time employment"
+        },
+        {
+          "id": 15,
+          "value": "Part time employment"
+        },
+        {
+          "id": 16,
+          "value": "Retired"
+        },
+        {
+          "id": 17,
+          "value": "Not in employment"
+        }
+      ],
+      "defaultAnswer": null,
+      "multiple": false,
+      "container": {
+        "subQuestions": [
+          {
+            "id": 13,
+            "question": "Type of employment:",
+            "type": "TEXT",
+            "order": 1,
+            "multiline": false,
+            "container": null
+          }
+        ],
+        "dependsOn": [
+          14,
+          15
+        ]
+      }
+    },
+    {
+      "id": 25,
+      "question": "In general, how do you find your job?",
+      "type": "CHOICE",
+      "order": 5,
+      "answers": [
+        {
+          "id": 20,
+          "value": "Not at all stressful"
+        },
+        {
+          "id": 21,
+          "value": "Mildly stressful"
+        },
+        {
+          "id": 22,
+          "value": "Moderately stressful"
+        },
+        {
+          "id": 23,
+          "value": "Very stressful"
+        },
+        {
+          "id": 24,
+          "value": "Extremely stressful"
+        }
+      ],
+      "defaultAnswer": null,
+      "multiple": false,
+      "container": null
+    },
+    {
+      "id": 26,
+      "question": "Did you get a flu vaccination in the past year?",
+      "type": "BOOL",
+      "order": 6,
+      "defaultAnswer": null,
+      "container": null
+    },
+    {
+      "id": 29,
+      "question": "In general, do you have any health problems that require you to limit your activities?",
+      "type": "BOOL",
+      "order": 7,
+      "defaultAnswer": null,
+      "container": {
+        "subQuestions": [
+          {
+            "id": 27,
+            "question": "If yes, what health problem limits your activities?",
+            "type": "TEXT",
+            "order": 1,
+            "multiline": false,
+            "container": null
+          }
+        ],
+        "dependsOn": [1]
+      }
+    },
+    {
+      "id": 30,
+      "question": "Do you suffer from heart disease?",
+      "type": "BOOL",
+      "order": 8,
+      "defaultAnswer": null,
+      "container": null
+    },
+    {
+      "id": 31,
+      "question": "Do you suffer from diabetes?",
+      "type": "BOOL",
+      "order": 9,
+      "defaultAnswer": null,
+      "container": null
+    },
+    {
+      "id": 32,
+      "question": "Do you suffer from lung disease / asthma?",
+      "type": "BOOL",
+      "order": 10,
+      "defaultAnswer": null,
+      "container": null
+    },
+    {
+      "id": 33,
+      "question": "Do you suffer from kidney disease?",
+      "type": "BOOL",
+      "order": 11,
+      "defaultAnswer": null,
+      "container": null
+    },
+    {
+      "id": 34,
+      "question": "Do you smoke?",
+      "type": "BOOL",
+      "order": 12,
+      "defaultAnswer": null,
+      "container": null
+    }
+  ],
+  "nameId": "BASIC",
+  "version": 0
+}

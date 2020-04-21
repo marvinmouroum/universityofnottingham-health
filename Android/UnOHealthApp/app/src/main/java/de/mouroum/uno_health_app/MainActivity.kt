@@ -1,7 +1,6 @@
 package de.mouroum.uno_health_app
 
 import android.content.Context
-import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,8 +12,7 @@ import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.beust.klaxon.Klaxon
-import kotlinx.android.synthetic.main.question_container.*
+import com.google.gson.Gson
 import java.lang.Thread.sleep
 import kotlin.concurrent.thread
 
@@ -32,46 +30,13 @@ class MainActivity : AppCompatActivity() {
         adapter = MyAdapter(this)
         openQuestion()
 
-        val result = Klaxon()
-            .parse<Survey>("""
-    {
-    "id": 35,
-    "questions": [
-        {
-            "id": 5,
-            "question": "What is your age?",
-            "type": "CHOICE",
-            "order": 1,
-            "specificQuestion":{
-                "answers": [
-                    {
-                        "id": 1,
-                        "value": "18 - 24"
-                    },
-                    {
-                        "id": 2,
-                        "value": "25 - 44"
-                    },
-                    {
-                        "id": 3,
-                        "value": "45 - 64"
-                    },
-                    {
-                        "id": 4,
-                        "value": "65 +"
-                    }
-                ],
-                "multiple": false,
-                },
-            "defaultAnswer": null,
-            "container": null
-        }],
-    "nameId": "BASIC",
-    "version": 0
-}
-    """)
+        var gson = Gson()
+        val basic_survey = resources.openRawResource(R.raw.basic_survey)
+        .bufferedReader().use { it.readText() }
 
-        assert(result?.nameId == "BASIC")
+        var result = gson?.fromJson(basic_survey, Survey::class.java)
+
+        assert(result as? Question != null)
 
     }
 
