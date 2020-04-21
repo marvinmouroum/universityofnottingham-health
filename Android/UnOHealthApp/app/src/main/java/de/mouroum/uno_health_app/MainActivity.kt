@@ -13,6 +13,7 @@ import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.beust.klaxon.Klaxon
 import kotlinx.android.synthetic.main.question_container.*
 import java.lang.Thread.sleep
 import kotlin.concurrent.thread
@@ -30,6 +31,47 @@ class MainActivity : AppCompatActivity() {
 
         adapter = MyAdapter(this)
         openQuestion()
+
+        val result = Klaxon()
+            .parse<Survey>("""
+    {
+    "id": 35,
+    "questions": [
+        {
+            "id": 5,
+            "question": "What is your age?",
+            "type": "CHOICE",
+            "order": 1,
+            "specificQuestion":{
+                "answers": [
+                    {
+                        "id": 1,
+                        "value": "18 - 24"
+                    },
+                    {
+                        "id": 2,
+                        "value": "25 - 44"
+                    },
+                    {
+                        "id": 3,
+                        "value": "45 - 64"
+                    },
+                    {
+                        "id": 4,
+                        "value": "65 +"
+                    }
+                ],
+                "multiple": false,
+                },
+            "defaultAnswer": null,
+            "container": null
+        }],
+    "nameId": "BASIC",
+    "version": 0
+}
+    """)
+
+        assert(result?.nameId == "BASIC")
 
     }
 
