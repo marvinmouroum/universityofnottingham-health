@@ -7,10 +7,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.Button
-import android.widget.ListView
-import android.widget.TextView
+import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.google.gson.Gson
 import java.lang.Thread.sleep
@@ -22,24 +19,52 @@ enum class AnswerType {
 class MainActivity : AppCompatActivity() {
 
     private var adapter:MyAdapter? = null
+    private var currentSurvey:Survey? = null
+
+    private var onQuestion:Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         adapter = MyAdapter(this)
-        openQuestion()
 
         var gson = Gson()
         val basic_survey = resources.openRawResource(R.raw.basic_survey)
         .bufferedReader().use { it.readText() }
 
         var result = gson?.fromJson(basic_survey, Survey::class.java)
+        currentSurvey = result
+
+        openQuestion()
+        nextQuestion()
 
     }
 
     val fragment = GeneralFragment.newInstance(R.layout.question_container)
 
+    fun nextQuestion(){
+
+        if(onQuestion >= currentSurvey?.questions?.size ?: 0){
+            return
+        }
+
+        thread {
+            while(fragment.createdView == null){
+                sleep(50)
+            }
+
+            runOnUiThread {
+                adapter?.setCurrentQuestion(currentSurvey!!.questions[onQuestion])
+                fragment.view!!.findViewById<TextView>(R.id.questionTitle).text = currentSurvey!!.questions[onQuestion].question
+                onQuestion += 1
+                adapter?.notifyDataSetChanged()
+            }
+        }
+
+
+
+    }
 
     fun openQuestion(){
         supportFragmentManager
@@ -83,14 +108,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun uponClick(view:View){
-        if(adapter?.type == AnswerType.MultipleChoice){
-            adapter?.type = AnswerType.Boolean
-        }
-        else{
-            adapter?.type = AnswerType.MultipleChoice
-        }
 
-        adapter?.notifyDataSetChanged()
+        nextQuestion()
     }
 
     private class MyAdapter(context: Context): BaseAdapter(){
@@ -98,14 +117,29 @@ class MainActivity : AppCompatActivity() {
         private val mContext: Context
 
         var type:AnswerType = AnswerType.MultipleChoice
+        var question:Question? = null
+        var selected:MutableSet<Int> = mutableSetOf()
 
         init {
             mContext = context
         }
 
+        fun setCurrentQuestion(q:Question){
+            this.question = q
+            this.selected = mutableSetOf()
+
+            when(q.type){
+                "CHOICE" -> type = AnswerType.MultipleChoice
+                "BOOL" -> type = AnswerType.Boolean
+            }
+
+            notifyDataSetChanged()
+
+        }
+
         override fun getCount(): Int {
             when(type){
-                AnswerType.MultipleChoice -> return 3
+                AnswerType.MultipleChoice -> return question?.answers?.size ?: 0
                 AnswerType.Boolean -> return 1
             }
         }
@@ -120,21 +154,33 @@ class MainActivity : AppCompatActivity() {
             when(type){
                 AnswerType.MultipleChoice -> {
                     val cell = layoutInActivity.inflate(R.layout.multiple_choice_question,parent,false)
+                    var textview = cell.findViewById<TextView>(R.id.answerTextview)
+                    val constLayOut = textview.layoutParams as ConstraintLayout.LayoutParams
+                    textview.text = question!!.answers!![position].value
                     cell.setOnClickListener {
 
                         var textview = it.findViewById<TextView>(R.id.answerTextview)
                         val constLayOut = textview.layoutParams as ConstraintLayout.LayoutParams
 
-                        if(constLayOut.leftMargin != 20){
-                            constLayOut.leftMargin   =  20
+                        if(question?.multiple == false && selected.isEmpty() == false){
+                            selected.clear()
+                            selected.add(position)
                         }
                         else{
-                            constLayOut.leftMargin   =  0
+                            selected.add(position)
                         }
 
-
-                        textview.layoutParams = constLayOut
+                        this@MyAdapter.notifyDataSetChanged()
                     }
+
+                    if(selected.contains(position)){
+                        constLayOut.leftMargin   =  20
+                    }
+                    else{
+                        constLayOut.leftMargin   =  0
+                    }
+                    textview.layoutParams = constLayOut
+
                     return cell
                 }
                 AnswerType.Boolean -> {
