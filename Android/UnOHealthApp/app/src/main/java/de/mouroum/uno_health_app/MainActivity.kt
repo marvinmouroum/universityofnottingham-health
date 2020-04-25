@@ -9,8 +9,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.github.kittinunf.fuel.Fuel
+import com.github.kittinunf.fuel.core.extensions.jsonBody
 import com.google.gson.Gson
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.io.OutputStreamWriter
 import java.lang.Thread.sleep
+import java.net.HttpURLConnection
+import java.net.URL
+import java.net.URLEncoder
 import kotlin.concurrent.thread
 
 enum class AnswerType {
@@ -110,6 +118,32 @@ class MainActivity : AppCompatActivity() {
     fun uponClick(view:View){
 
         nextQuestion()
+    }
+
+    fun sendAnswer(nameId:String) {
+
+        val body = """{
+            "surveyResponse": {
+            "questionId": 0,
+            "answerId": 0
+            },
+            "authentication": {
+            "authorities": [
+            {
+                "authority": "string"
+            }
+            ],
+            "principal": {},
+            "authenticated": true,
+            "details": {},
+            "credentials": {},
+            "name": "string"
+            }
+        }"""
+        Fuel.post("http//localhost:8080/survey/"+nameId+"/answer")
+            .jsonBody(body)
+            .also { println(it) }
+            .response { result -> }
     }
 
     private class MyAdapter(context: Context): BaseAdapter(){
