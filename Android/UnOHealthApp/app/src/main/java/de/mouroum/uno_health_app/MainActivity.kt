@@ -120,12 +120,12 @@ class MainActivity : AppCompatActivity() {
         nextQuestion()
     }
 
-    fun sendAnswer(nameId:String) {
+    fun sendAnswer(nameId:String, answer:String, Qid:Int,Aid:Int) {
 
         val body = """{
             "surveyResponse": {
-            "questionId": 0,
-            "answerId": 0
+            "questionId": ${Qid},
+            "answerId": ${Aid}
             },
             "authentication": {
             "authorities": [
@@ -140,7 +140,7 @@ class MainActivity : AppCompatActivity() {
             "name": "string"
             }
         }"""
-        Fuel.post("http//localhost:8080/survey/"+nameId+"/answer")
+        Fuel.post("http//localhost:8080/survey/"+nameId+"/"+answer)
             .jsonBody(body)
             .also { println(it) }
             .response { result -> }
