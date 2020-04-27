@@ -1,29 +1,21 @@
 package de.mouroum.uno_health_app
 
-import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.github.kittinunf.fuel.Fuel
-import com.github.kittinunf.fuel.core.extensions.jsonBody
 import com.github.kittinunf.fuel.httpGet
 import com.google.gson.Gson
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.io.OutputStreamWriter
+import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import java.lang.Thread.sleep
-import java.net.HttpURLConnection
 import java.net.URL
-import java.net.URLEncoder
 import kotlin.concurrent.thread
+
 
 enum class AnswerType {
     Boolean , MultipleChoice
@@ -123,33 +115,62 @@ class MainActivity : AppCompatActivity() {
 
     fun uponClick(view:View){
 
-        nextQuestion()
+        thread {
+
+            if(adapter?.question?.answers != null && adapter!!.selected != null){
+                val answer = adapter!!.question!!.answers[adapter!!.selected!!]
+                sendAnswer(currentSurvey!!.nameId, adapter!!.question!!.id,answer.id)
+            }
+            else if(adapter!!.selected != null){
+                sendAnswer(currentSurvey!!.nameId,adapter!!.question!!.id,adapter!!.selected!!)
+            }
+            else{
+                runOnUiThread {
+                    Toast.makeText(this,"UPPS",Toast.LENGTH_SHORT)
+                }
+
+                return@thread
+            }
+
+
+            runOnUiThread {
+                nextQuestion()
+            }
+        }
+
     }
 
-    fun sendAnswer(nameId:String, answer:String, Qid:Int,Aid:Int) {
+    val JSON: MediaType? = "application/json; charset=utf-8".toMediaTypeOrNull()
 
-        val body = """{
-            "surveyResponse": {
-            "questionId": ${Qid},
-            "answerId": ${Aid}
-            },
-            "authentication": {
-            "authorities": [
-            {
-                "authority": "string"
-            }
-            ],
-            "principal": {},
-            "authenticated": true,
-            "details": {},
-            "credentials": {},
-            "name": "string"
-            }
-        }"""
-        Fuel.post("http//localhost:8080/survey/"+nameId+"/"+answer)
-            .jsonBody(body)
-            .also { println(it) }
-            .response { result -> }
+
+    fun sendAnswer(nameId:String, Qid:Int,Aid:Int) {
+
+        val client = OkHttpClient()
+        val url = URL("http://192.168.178.41:8080/survey/${nameId}/answer")
+
+        val json = """{
+            "questionId":${Qid},
+            "answerId":${Aid}
+            }""".trimMargin()
+
+        val body = RequestBody.create(JSON,json);
+
+
+        val request = Request.Builder()
+            .url(url)
+            .post(body)
+            .addHeader("Authorization","Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNmVlZTYwNi00YTE0LTRlZWUtODIwYi03MzhlMDg0Yjg2NWIifQ.xoa28DDYgWUEIV_oP2-MTmuXnDprSyUE9Rs-sf-m-jPdLpY_iGrVHmfDC4Cz3fVd0btX9wvHzF7lZsvbZ0dyeA")
+            .addHeader("Content-Type","application/json")
+            .build()
+
+        val response = client.newCall(request).execute()
+
+        val responseBody = response.body!!.string()
+        print(response.code)
+
+        //Response
+        println("Response Body: " + responseBody)
+
     }
 
     fun getSurvey(){
@@ -176,13 +197,13 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private class MyAdapter(context: Context): BaseAdapter(){
+    private class MyAdapter(context: MainActivity): BaseAdapter(){
 
-        private val mContext: Context
+        private val mContext: MainActivity
 
         var type:AnswerType = AnswerType.MultipleChoice
         var question:Question? = null
-        var selected:MutableSet<Int> = mutableSetOf()
+        var selected:Int? = null
 
         init {
             mContext = context
@@ -190,7 +211,6 @@ class MainActivity : AppCompatActivity() {
 
         fun setCurrentQuestion(q:Question){
             this.question = q
-            this.selected = mutableSetOf()
 
             when(q.type){
                 "CHOICE" -> type = AnswerType.MultipleChoice
@@ -226,18 +246,12 @@ class MainActivity : AppCompatActivity() {
                         var textview = it.findViewById<TextView>(R.id.answerTextview)
                         val constLayOut = textview.layoutParams as ConstraintLayout.LayoutParams
 
-                        if(question?.multiple == false && selected.isEmpty() == false){
-                            selected.clear()
-                            selected.add(position)
-                        }
-                        else{
-                            selected.add(position)
-                        }
+                        selected = position
 
                         this@MyAdapter.notifyDataSetChanged()
                     }
 
-                    if(selected.contains(position)){
+                    if(selected == position){
                         constLayOut.leftMargin   =  20
                     }
                     else{
@@ -249,6 +263,12 @@ class MainActivity : AppCompatActivity() {
                 }
                 AnswerType.Boolean -> {
                     val cell = layoutInActivity.inflate(R.layout.boolean_choice_question,parent,false)
+                    cell.findViewById<RadioGroup>(R.id.radiogroup).setOnCheckedChangeListener { group, checkedId ->
+                        when(checkedId){
+                            R.id.radiotrue -> selected = 1
+                            R.id.radiofalse -> selected = 0
+                        }
+                    }
                     return cell
                 }
             }
