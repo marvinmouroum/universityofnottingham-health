@@ -4,7 +4,8 @@ data class Survey(
     val id:Int,
     val questions:List<Question>,
     val nameId:String,
-    val version:Int
+    val version:Int,
+    val description:String
 )
 
 data class SubQuestion(
@@ -20,7 +21,8 @@ data class Answer( val id:Int, val value:String)
 
 data class Container(
     val subQuestions:List<SubQuestion>,
-    val dependsOn:List<Int>
+    val choiceDependsOn:List<Int>,
+    val boolDependsOn:Boolean
 )
 
 data class Question (

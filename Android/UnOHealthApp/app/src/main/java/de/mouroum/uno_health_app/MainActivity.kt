@@ -3,6 +3,7 @@ package de.mouroum.uno_health_app
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -11,7 +12,10 @@ import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.extensions.jsonBody
+import com.github.kittinunf.fuel.httpGet
 import com.google.gson.Gson
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
@@ -47,6 +51,9 @@ class MainActivity : AppCompatActivity() {
         openQuestion()
         nextQuestion()
 
+        thread {
+            get()
+        }
     }
 
     val fragment = GeneralFragment.newInstance(R.layout.question_container)
@@ -105,7 +112,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
     }
 
     fun closeQuestion(){
@@ -144,6 +150,30 @@ class MainActivity : AppCompatActivity() {
             .jsonBody(body)
             .also { println(it) }
             .response { result -> }
+    }
+
+    fun getSurvey(){
+        "http://localhost:8080".httpGet().header("Authorization","Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNmVlZTYwNi00YTE0LTRlZWUtODIwYi03MzhlMDg0Yjg2NWIifQ.xoa28DDYgWUEIV_oP2-MTmuXnDprSyUE9Rs-sf-m-jPdLpY_iGrVHmfDC4Cz3fVd0btX9wvHzF7lZsvbZ0dyeA")
+    }
+
+    fun get() {
+        val client = OkHttpClient()
+        val url = URL("http://192.168.178.41:8080/survey/REGULAR")
+
+        val request = Request.Builder()
+            .url(url)
+            .get()
+            .addHeader("Authorization","Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNmVlZTYwNi00YTE0LTRlZWUtODIwYi03MzhlMDg0Yjg2NWIifQ.xoa28DDYgWUEIV_oP2-MTmuXnDprSyUE9Rs-sf-m-jPdLpY_iGrVHmfDC4Cz3fVd0btX9wvHzF7lZsvbZ0dyeA")
+            .build()
+
+
+        val response = client.newCall(request).execute()
+
+        val responseBody = response.body!!.string()
+
+        //Response
+        println("Response Body: " + responseBody)
+
     }
 
     private class MyAdapter(context: Context): BaseAdapter(){

@@ -1,27 +1,23 @@
 {
-  "id": 35,
+  "id": 119,
   "questions": [
     {
-      "id": 5,
-      "question": "What is your age?",
+      "id": 39,
+      "question": "Under each heading, please tick the ONE box that best describes your health TODAY:",
       "type": "CHOICE",
       "order": 1,
       "answers": [
         {
-          "id": 1,
-          "value": "18 - 24"
+          "id": 36,
+          "value": "I have no problems walking about"
         },
         {
-          "id": 2,
-          "value": "25 - 44"
+          "id": 37,
+          "value": "I have some problems walking about"
         },
         {
-          "id": 3,
-          "value": "45 - 64"
-        },
-        {
-          "id": 4,
-          "value": "65 +"
+          "id": 38,
+          "value": "I have a lot of problems walking about"
         }
       ],
       "defaultAnswer": null,
@@ -29,18 +25,22 @@
       "container": null
     },
     {
-      "id": 8,
-      "question": "Gender?",
+      "id": 43,
+      "question": "Looking after myself, please tick the ONE box that best describes your health TODAY:",
       "type": "CHOICE",
       "order": 2,
       "answers": [
         {
-          "id": 6,
-          "value": "Male"
+          "id": 40,
+          "value": "I have no problems washing or dressing myself"
         },
         {
-          "id": 7,
-          "value": "Female"
+          "id": 41,
+          "value": "I have some problems washing or dressing myself"
+        },
+        {
+          "id": 42,
+          "value": "I have a lot of problems washing or dressing myself"
         }
       ],
       "defaultAnswer": null,
@@ -48,22 +48,22 @@
       "container": null
     },
     {
-      "id": 12,
-      "question": "What is your marital status?",
+      "id": 47,
+      "question": "Doing usual activities please tick the ONE box that best describes your health TODAY (for example, work, study, housework, family or leisure activities):",
       "type": "CHOICE",
       "order": 3,
       "answers": [
         {
-          "id": 9,
-          "value": "Married or civil partnership"
+          "id": 44,
+          "value": "I have no problems doing my usual activities"
         },
         {
-          "id": 10,
-          "value": "Living with partner"
+          "id": 45,
+          "value": "I have some problems doing my usual activities"
         },
         {
-          "id": 11,
-          "value": "Single"
+          "id": 46,
+          "value": "I have a lot of problems doing my usual activities"
         }
       ],
       "defaultAnswer": null,
@@ -71,72 +71,45 @@
       "container": null
     },
     {
-      "id": 19,
-      "question": "Are you in employment?",
+      "id": 51,
+      "question": "Having pain/ discomfort:",
       "type": "CHOICE",
       "order": 4,
       "answers": [
         {
-          "id": 14,
-          "value": "Full time employment"
+          "id": 48,
+          "value": "I have no pain or discomfort"
         },
         {
-          "id": 15,
-          "value": "Part time employment"
+          "id": 49,
+          "value": "I have some pain or discomfort"
         },
         {
-          "id": 16,
-          "value": "Retired"
-        },
-        {
-          "id": 17,
-          "value": "Not in employment"
+          "id": 50,
+          "value": "I have a lot of pain or discomfort"
         }
       ],
       "defaultAnswer": null,
       "multiple": false,
-      "container": {
-        "subQuestions": [
-          {
-            "id": 13,
-            "question": "Type of employment:",
-            "type": "TEXT",
-            "order": 1,
-            "multiline": false,
-            "container": null
-          }
-        ],
-        "dependsOn": [
-          14,
-          15
-        ]
-      }
+      "container": null
     },
     {
-      "id": 25,
-      "question": "In general, how do you find your job?",
+      "id": 55,
+      "question": "Feeling worried, sad or unhappy:",
       "type": "CHOICE",
       "order": 5,
       "answers": [
         {
-          "id": 20,
-          "value": "Not at all stressful"
+          "id": 52,
+          "value": "I am not worried, sad or unhappy"
         },
         {
-          "id": 21,
-          "value": "Mildly stressful"
+          "id": 53,
+          "value": "I am a bit worried, sad or unhappy"
         },
         {
-          "id": 22,
-          "value": "Moderately stressful"
-        },
-        {
-          "id": 23,
-          "value": "Very stressful"
-        },
-        {
-          "id": 24,
-          "value": "Extremely stressful"
+          "id": 54,
+          "value": "I am very worries, sad or unhappy"
         }
       ],
       "defaultAnswer": null,
@@ -144,74 +117,418 @@
       "container": null
     },
     {
-      "id": 26,
-      "question": "Did you get a flu vaccination in the past year?",
-      "type": "BOOL",
+      "id": 61,
+      "question": "How often do you feel lonely?",
+      "type": "CHOICE",
       "order": 6,
+      "answers": [
+        {
+          "id": 56,
+          "value": "Often / always"
+        },
+        {
+          "id": 57,
+          "value": "Some of the time"
+        },
+        {
+          "id": 58,
+          "value": "Occasionally"
+        },
+        {
+          "id": 59,
+          "value": "Hardly ever"
+        },
+        {
+          "id": 60,
+          "value": "Never"
+        }
+      ],
       "defaultAnswer": null,
+      "multiple": false,
       "container": null
     },
     {
-      "id": 29,
-      "question": "In general, do you have any health problems that require you to limit your activities?",
-      "type": "BOOL",
+      "id": 67,
+      "question": "How would you rate your general health TODAY:",
+      "type": "CHOICE",
       "order": 7,
+      "answers": [
+        {
+          "id": 62,
+          "value": "Excellent"
+        },
+        {
+          "id": 63,
+          "value": "Very good"
+        },
+        {
+          "id": 64,
+          "value": "Good"
+        },
+        {
+          "id": 65,
+          "value": "Fair"
+        },
+        {
+          "id": 66,
+          "value": "Poor"
+        }
+      ],
       "defaultAnswer": null,
-      "container": {
-        "subQuestions": [
-          {
-            "id": 27,
-            "question": "If yes, what health problem limits your activities?",
-            "type": "TEXT",
-            "order": 1,
-            "multiline": false,
-            "container": null
-          }
-        ],
-        "dependsOn": [1]
-      }
+      "multiple": false,
+      "container": null
     },
     {
-      "id": 30,
-      "question": "Do you suffer from heart disease?",
+      "id": 68,
+      "question": "Do you think you currently have/ had a COVID-19 infection?",
       "type": "BOOL",
       "order": 8,
       "defaultAnswer": null,
       "container": null
     },
     {
-      "id": 31,
-      "question": "Do you suffer from diabetes?",
+      "id": 69,
+      "question": "Have you been tested for a COVID-19 infection?",
       "type": "BOOL",
       "order": 9,
       "defaultAnswer": null,
       "container": null
     },
     {
-      "id": 32,
-      "question": "Do you suffer from lung disease / asthma?",
+      "id": 72,
+      "question": "Have you been hospitalised for a COVID-19 infection?",
       "type": "BOOL",
       "order": 10,
       "defaultAnswer": null,
-      "container": null
+      "container": {
+        "subQuestions": [
+          {
+            "id": 70,
+            "question": "How many days were you sick?",
+            "type": "TEXT",
+            "order": 1,
+            "multiline": false,
+            "container": null
+          }
+        ],
+        "boolDependsOn": true
+      }
     },
     {
-      "id": 33,
-      "question": "Do you suffer from kidney disease?",
-      "type": "BOOL",
+      "id": 83,
+      "question": "To what degree have you experienced the following symptoms in the last 7 days:",
+      "type": "TITLE",
       "order": 11,
+      "container": {
+        "subQuestions": [
+          {
+            "id": 73,
+            "question": "Headache",
+            "type": "BOOL",
+            "order": 1,
+            "defaultAnswer": null,
+            "container": null
+          },
+          {
+            "id": 74,
+            "question": "Muscle pain/aches",
+            "type": "BOOL",
+            "order": 2,
+            "defaultAnswer": null,
+            "container": null
+          },
+          {
+            "id": 75,
+            "question": "Difficulty breathing",
+            "type": "BOOL",
+            "order": 3,
+            "defaultAnswer": null,
+            "container": null
+          },
+          {
+            "id": 76,
+            "question": "Fever/ high temperature",
+            "type": "BOOL",
+            "order": 4,
+            "defaultAnswer": null,
+            "container": null
+          },
+          {
+            "id": 77,
+            "question": "Sore throat",
+            "type": "BOOL",
+            "order": 5,
+            "defaultAnswer": null,
+            "container": null
+          },
+          {
+            "id": 78,
+            "question": "Dry cough",
+            "type": "BOOL",
+            "order": 6,
+            "defaultAnswer": null,
+            "container": null
+          },
+          {
+            "id": 79,
+            "question": "Wet cough",
+            "type": "BOOL",
+            "order": 7,
+            "defaultAnswer": null,
+            "container": null
+          },
+          {
+            "id": 80,
+            "question": "I felt physically exhausted",
+            "type": "BOOL",
+            "order": 8,
+            "defaultAnswer": null,
+            "container": null
+          },
+          {
+            "id": 81,
+            "question": "loss of smell and taste",
+            "type": "BOOL",
+            "order": 9,
+            "defaultAnswer": null,
+            "container": null
+          }
+        ]
+      }
+    },
+    {
+      "id": 84,
+      "question": "How much have you been concerned about the corona crisis in the past 7 days?",
+      "type": "RANGE",
+      "order": 12,
+      "minValue": 1,
+      "maxValue": 10,
+      "minText": "Not concerned",
+      "maxText": "Extremely concerned",
+      "defaultValue": null,
+      "container": null
+    },
+    {
+      "id": 85,
+      "question": "How would you rate your quality of life over the last 7 days?",
+      "type": "RANGE",
+      "order": 13,
+      "minValue": 1,
+      "maxValue": 10,
+      "minText": "Terrible",
+      "maxText": "Outstanding",
+      "defaultValue": null,
+      "container": null
+    },
+    {
+      "id": 86,
+      "question": "How socially isolated have you felt in the last 7 days?",
+      "type": "RANGE",
+      "order": 14,
+      "minValue": 1,
+      "maxValue": 10,
+      "minText": "Not socially isolated",
+      "maxText": "Extremely socially isolated",
+      "defaultValue": null,
+      "container": null
+    },
+    {
+      "id": 87,
+      "question": "If you suffer from depression, how much has this condition been affected by the COVID-19 crisis in the last 7 days?",
+      "type": "RANGE",
+      "order": 15,
+      "minValue": 1,
+      "maxValue": 10,
+      "minText": "Not at all",
+      "maxText": "Extremely depressed",
+      "defaultValue": null,
+      "container": null
+    },
+    {
+      "id": 88,
+      "question": "If you suffer from anxiety, how much has this condition been affected by the COVID-19 crisis in the last 7 days?",
+      "type": "RANGE",
+      "order": 16,
+      "minValue": 1,
+      "maxValue": 10,
+      "minText": "Not at all",
+      "maxText": "Extremely anxious",
+      "defaultValue": null,
+      "container": null
+    },
+    {
+      "id": 94,
+      "question": "How would you rate your overall mental health?",
+      "type": "CHOICE",
+      "order": 17,
+      "answers": [
+        {
+          "id": 89,
+          "value": "Excellent"
+        },
+        {
+          "id": 90,
+          "value": "Very good"
+        },
+        {
+          "id": 91,
+          "value": "Good"
+        },
+        {
+          "id": 92,
+          "value": "Fair"
+        },
+        {
+          "id": 93,
+          "value": "Poor"
+        }
+      ],
+      "defaultAnswer": null,
+      "multiple": false,
+      "container": null
+    },
+    {
+      "id": 95,
+      "question": "Has the COVID-19 crisis affected the way you normally source your food/ medicines?",
+      "type": "BOOL",
+      "order": 18,
       "defaultAnswer": null,
       "container": null
     },
     {
-      "id": 34,
-      "question": "Do you smoke?",
-      "type": "BOOL",
-      "order": 12,
+      "id": 100,
+      "question": "Where do you currently shop for your groceries?",
+      "type": "CHOICE",
+      "order": 19,
+      "answers": [
+        {
+          "id": 96,
+          "value": "Local supermarket"
+        },
+        {
+          "id": 97,
+          "value": "Online shopping"
+        },
+        {
+          "id": 98,
+          "value": "Local corner shops"
+        },
+        {
+          "id": 99,
+          "value": "Farmer’s market"
+        }
+      ],
       "defaultAnswer": null,
+      "multiple": false,
+      "container": null
+    },
+    {
+      "id": 104,
+      "question": "How healthy is your eating pattern compared to the period before the COVID-19 crisis?",
+      "type": "CHOICE",
+      "order": 20,
+      "answers": [
+        {
+          "id": 101,
+          "value": "Much less healthy"
+        },
+        {
+          "id": 102,
+          "value": "Just as healthy"
+        },
+        {
+          "id": 103,
+          "value": "Healthier"
+        }
+      ],
+      "defaultAnswer": null,
+      "multiple": false,
+      "container": null
+    },
+    {
+      "id": 110,
+      "question": "How would you rate your overall diet?",
+      "type": "CHOICE",
+      "order": 21,
+      "answers": [
+        {
+          "id": 105,
+          "value": "Excellent"
+        },
+        {
+          "id": 106,
+          "value": "Very good"
+        },
+        {
+          "id": 107,
+          "value": "Good"
+        },
+        {
+          "id": 108,
+          "value": "Fair"
+        },
+        {
+          "id": 109,
+          "value": "Poor"
+        }
+      ],
+      "defaultAnswer": null,
+      "multiple": false,
+      "container": null
+    },
+    {
+      "id": 114,
+      "question": "How many hours of moderately intense exercise did you do before the Covid-19 crisis?",
+      "type": "CHOICE",
+      "order": 22,
+      "answers": [
+        {
+          "id": 111,
+          "value": "Less than 1 hour"
+        },
+        {
+          "id": 112,
+          "value": "1-2 hours"
+        },
+        {
+          "id": 113,
+          "value": "More than 2 hours"
+        }
+      ],
+      "defaultAnswer": null,
+      "multiple": false,
+      "container": null
+    },
+    {
+      "id": 117,
+      "question": "Has the COVID-19 crisis affected your ability to exercise?",
+      "type": "BOOL",
+      "order": 23,
+      "defaultAnswer": null,
+      "container": {
+        "subQuestions": [
+          {
+            "id": 115,
+            "question": "If yes, how?",
+            "type": "TEXT",
+            "order": 1,
+            "multiline": false,
+            "container": null
+          }
+        ],
+        "boolDependsOn": true
+      }
+    },
+    {
+      "id": 118,
+      "question": "Has the COVID-19 crisis changed the way that you use social media?",
+      "type": "TEXT",
+      "order": 24,
+      "multiline": true,
       "container": null
     }
   ],
-  "nameId": "BASIC",
+  "nameId": "REGULAR",
+  "description": null,
   "version": 0
 }
