@@ -40,6 +40,7 @@ class RegisterActivity:AppCompatActivity() {
         val response = client.newCall(request).execute()
 
         val responseBody = response.body!!.string()
+
         print(response.code)
 
         //Response
