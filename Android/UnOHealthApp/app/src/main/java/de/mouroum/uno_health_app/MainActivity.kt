@@ -219,13 +219,9 @@ class MainActivity : AppCompatActivity() {
                     val textview = cell.findViewById<TextView>(R.id.answerTextview)
                     val constLayOut = textview.layoutParams as ConstraintLayout.LayoutParams
                     textview.text = question!!.answers!![position].value
+
                     cell.setOnClickListener {
-
-                        val textview = it.findViewById<TextView>(R.id.answerTextview)
-                        val constLayOut = textview.layoutParams as ConstraintLayout.LayoutParams
-
                         selected = position
-
                         this@MyAdapter.notifyDataSetChanged()
                     }
 

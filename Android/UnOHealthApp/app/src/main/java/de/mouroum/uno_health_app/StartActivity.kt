@@ -1,6 +1,7 @@
 package de.mouroum.uno_health_app
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View
@@ -19,9 +20,19 @@ class StartSurvey: AppCompatActivity() {
     var surveyString:String? = null
     var currentSurvey:Survey? = null
 
+    val PREFS_FILENAME = "de.mouroum.uno_health_app.prefs"
+    var prefs: SharedPreferences? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.survey_start)
+
+        prefs = this.getSharedPreferences(PREFS_FILENAME, 0)
+
+        if(checkIfVerified() == false){
+            val intent = Intent(this,RegisterActivity::class.java)
+            startActivity(intent)
+        }
 
         thread {
             get()
@@ -71,5 +82,10 @@ class StartSurvey: AppCompatActivity() {
             Toast.makeText(this,"The download failed",Toast.LENGTH_LONG)
             get()
         }
+    }
+
+    fun checkIfVerified():Boolean{
+
+        return prefs?.getBoolean("VERIFY",false) ?: false
     }
 }
