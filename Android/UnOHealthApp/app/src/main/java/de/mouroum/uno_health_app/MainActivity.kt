@@ -18,7 +18,7 @@ import java.net.URL
 import kotlin.concurrent.thread
 
 enum class AnswerType {
-    Boolean , MultipleChoice
+    Boolean , MultipleChoice, Text, Title, Range
 }
 
 class MainActivity : AppCompatActivity() {
@@ -203,6 +203,9 @@ class MainActivity : AppCompatActivity() {
             when(type){
                 AnswerType.MultipleChoice -> return question?.answers?.size ?: 0
                 AnswerType.Boolean -> return 1
+                AnswerType.Title -> return question?.container?.subQuestions?.size ?: 0
+                AnswerType.Text -> return 1
+                AnswerType.Range -> return 1
             }
         }
 
@@ -210,52 +213,54 @@ class MainActivity : AppCompatActivity() {
             return ""
         }
 
-        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View? {
             val layoutInActivity = LayoutInflater.from(mContext)
 
             when(type) {
-                AnswerType.MultipleChoice -> {
-                    val cell = layoutInActivity.inflate(R.layout.multiple_choice_question,parent,false)
-                    val textview = cell.findViewById<TextView>(R.id.answerTextview)
-                    val constLayOut = textview.layoutParams as ConstraintLayout.LayoutParams
-                    textview.text = question!!.answers!![position].value
-                    cell.setOnClickListener {
-
-                        val textview = it.findViewById<TextView>(R.id.answerTextview)
-                        val constLayOut = textview.layoutParams as ConstraintLayout.LayoutParams
-
-                        selected = position
-
-                        this@MyAdapter.notifyDataSetChanged()
-                    }
-
-                    if(selected == position){
-                        constLayOut.leftMargin   =  20
-                    }
-                    else{
-                        constLayOut.leftMargin   =  0
-                    }
-                    textview.layoutParams = constLayOut
-
-                    return cell
-                }
-                AnswerType.Boolean -> {
-                    val cell = layoutInActivity.inflate(R.layout.boolean_choice_question,parent,false)
-                    cell.findViewById<RadioGroup>(R.id.radiogroup).setOnCheckedChangeListener { group, checkedId ->
-                        when(checkedId){
-                            R.id.radiotrue -> selected = 1
-                            R.id.radiofalse -> selected = 0
-                        }
-                    }
-                    return cell
-                }
+                AnswerType.MultipleChoice -> return getChoiceView(position, parent, layoutInActivity)
+                AnswerType.Boolean -> return getBoolView(position, parent, layoutInActivity)
+                AnswerType.Range -> return null
+                AnswerType.Text -> return null
+                AnswerType.Title -> return null
             }
-
-            return View(mContext)
         }
 
         override fun getItemId(position: Int): Long {
             return position.toLong()
+        }
+
+        fun getChoiceView(position: Int, parent: ViewGroup?, layoutInActivity:LayoutInflater): View {
+
+            val cell = layoutInActivity.inflate(R.layout.multiple_choice_question, parent,false)
+            val textview = cell.findViewById<TextView>(R.id.answerTextview)
+            val constLayOut = textview.layoutParams as ConstraintLayout.LayoutParams
+            textview.text = question!!.answers!![position].value
+
+            cell.setOnClickListener {
+                selected = position
+                this@MyAdapter.notifyDataSetChanged()
+            }
+
+            if (selected == position) {
+                constLayOut.leftMargin   =  20
+            }
+            else {
+                constLayOut.leftMargin   =  0
+            }
+            textview.layoutParams = constLayOut
+
+            return cell
+        }
+
+        fun getBoolView(position: Int, parent: ViewGroup?, layoutInActivity:LayoutInflater): View {
+            val cell = layoutInActivity.inflate(R.layout.boolean_choice_question,parent,false)
+            cell.findViewById<RadioGroup>(R.id.radiogroup).setOnCheckedChangeListener { group, checkedId ->
+                when(checkedId){
+                    R.id.radiotrue -> selected = 1
+                    R.id.radiofalse -> selected = 0
+                }
+            }
+            return cell
         }
     }
 }
