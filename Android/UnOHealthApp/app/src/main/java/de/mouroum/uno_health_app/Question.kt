@@ -1,12 +1,14 @@
 package de.mouroum.uno_health_app
 
-data class Survey(
+import java.io.Serializable
+
+data class Survey (
     val id:Int,
     val questions:List<Question>,
     val nameId:String,
     val version:Int,
     val description:String
-)
+) : Serializable
 
 data class SubQuestion(
     val id:Int,
@@ -15,15 +17,15 @@ data class SubQuestion(
     val order: Int,
     val multiline:Boolean,
     val container:Container?
-)
+) : Serializable
 
-data class Answer( val id:Int, val value:String)
+data class Answer( val id:Int, val value:String) : Serializable
 
 data class Container(
     val subQuestions:List<SubQuestion>,
     val choiceDependsOn:List<Int>,
     val boolDependsOn:Boolean
-)
+) : Serializable
 
 data class Question (
     val id:Int,
@@ -36,11 +38,4 @@ data class Question (
     val answers:List<Answer>,
     val multiple:Boolean
 
-)
-
-data class Student (
-    var name: String? = null,
-    var address: String? = null)
-
-data class Test (
-    var id: Int)
+) : Serializable

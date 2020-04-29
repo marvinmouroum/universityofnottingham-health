@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.view.View
 import android.widget.Toast
 import com.google.gson.Gson
+import de.mouroum.uno_health_app.UONApp.Companion.HOST
+import de.mouroum.uno_health_app.UONApp.Companion.TOKEN
 import kotlinx.android.synthetic.main.survey_start.*
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -24,51 +26,45 @@ class StartSurvey: AppCompatActivity() {
         thread {
             get()
         }
-
-
-
     }
-
 
     fun get() {
         val client = OkHttpClient()
-        val url = URL("http://192.168.178.41:8080/survey/REGULAR")
+        val url = URL("$HOST/survey/BASIC")
 
         val request = Request.Builder()
             .url(url)
             .get()
-            .addHeader("Authorization","Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNmVlZTYwNi00YTE0LTRlZWUtODIwYi03MzhlMDg0Yjg2NWIifQ.xoa28DDYgWUEIV_oP2-MTmuXnDprSyUE9Rs-sf-m-jPdLpY_iGrVHmfDC4Cz3fVd0btX9wvHzF7lZsvbZ0dyeA")
+            .addHeader("Authorization", TOKEN)
             .build()
 
-
         val response = client.newCall(request).execute()
-
         val responseBody = response.body!!.string()
 
         //Response
-        println("Response Body: " + responseBody)
+        println("Response Body: $responseBody")
         surveyString = responseBody
 
         convertSurvey()
-
     }
 
-    fun convertSurvey(){
-        var result = Gson().fromJson(surveyString, Survey::class.java)
+    private fun convertSurvey() {
+        val result = Gson().fromJson(surveyString, Survey::class.java)
         currentSurvey = result
-
         display()
     }
 
-    fun display(){
+    private fun display(){
         surveyText.text = currentSurvey?.description ?: "This survey has no description"
-        surveySummary.text = "${currentSurvey?.questions?.size ?: 0} Questions"
+        val text = "${currentSurvey?.questions?.size ?: 0} Questions"
+        surveySummary.text = text
     }
 
     fun jump(view:View){
 
-        if(currentSurvey != null) {
-            var intent = Intent(this, MainActivity::class.java)
+        if (currentSurvey != null) {
+            val intent = Intent(this, MainActivity::class.java)
+            intent.putExtra("survey", currentSurvey)
             startActivity(intent)
         }
         else{
@@ -76,5 +72,4 @@ class StartSurvey: AppCompatActivity() {
             get()
         }
     }
-
 }

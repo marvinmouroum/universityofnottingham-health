@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/bool_answer">
 
@@ -9,15 +11,17 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:id="@+id/radiogroup">
+
         <RadioButton
+            android:id="@+id/radiotrue"
             android:layout_width="50pt"
             android:layout_height="50pt"
-            android:text="True"
-            android:id="@+id/radiotrue"/>
+            android:text="Yes" />
+
         <RadioButton
+            android:id="@+id/radiofalse"
             android:layout_width="50pt"
             android:layout_height="50pt"
-            android:text="False"
-            android:id="@+id/radiofalse"/>
+            android:text="No" />
     </RadioGroup>
 </androidx.constraintlayout.widget.ConstraintLayout>

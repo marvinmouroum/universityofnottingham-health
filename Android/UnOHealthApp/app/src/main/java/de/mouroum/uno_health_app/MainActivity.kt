@@ -8,18 +8,19 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.github.kittinunf.fuel.httpGet
-import com.google.gson.Gson
+import de.mouroum.uno_health_app.UONApp.Companion.HOST
+import de.mouroum.uno_health_app.UONApp.Companion.TOKEN
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import java.lang.Thread.sleep
 import java.net.URL
 import kotlin.concurrent.thread
 
-
 enum class AnswerType {
     Boolean , MultipleChoice
 }
+
 class MainActivity : AppCompatActivity() {
 
     private var adapter:MyAdapter? = null
@@ -27,18 +28,16 @@ class MainActivity : AppCompatActivity() {
 
     private var onQuestion:Int = 0
 
+    private val mediaTypeJson: MediaType? = "application/json; charset=utf-8".toMediaTypeOrNull()
+
+    private val fragment = GeneralFragment.newInstance(R.layout.question_container)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        currentSurvey = intent.extras?.get("survey") as Survey
         adapter = MyAdapter(this)
-
-        var gson = Gson()
-        val basic_survey = resources.openRawResource(R.raw.basic_survey)
-        .bufferedReader().use { it.readText() }
-
-        var result = gson?.fromJson(basic_survey, Survey::class.java)
-        currentSurvey = result
 
         openQuestion()
         nextQuestion()
@@ -48,9 +47,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    val fragment = GeneralFragment.newInstance(R.layout.question_container)
-
-    fun nextQuestion(){
+    private fun nextQuestion(){
 
         if(onQuestion >= currentSurvey?.questions?.size ?: 0){
             return
@@ -68,12 +65,9 @@ class MainActivity : AppCompatActivity() {
                 adapter?.notifyDataSetChanged()
             }
         }
-
-
-
     }
 
-    fun openQuestion(){
+    private fun openQuestion(){
         supportFragmentManager
             // 3
             .beginTransaction()
@@ -99,11 +93,8 @@ class MainActivity : AppCompatActivity() {
                         }
                         return@setOnTouchListener false
                     }
-
-
             }
         }
-
     }
 
     fun closeQuestion(){
@@ -117,14 +108,14 @@ class MainActivity : AppCompatActivity() {
 
         thread {
 
-            if(adapter?.question?.answers != null && adapter!!.selected != null){
+            if (adapter?.question?.answers != null && adapter!!.selected != null) {
                 val answer = adapter!!.question!!.answers[adapter!!.selected!!]
                 sendAnswer(currentSurvey!!.nameId, adapter!!.question!!.id,answer.id)
             }
-            else if(adapter!!.selected != null){
+            else if (adapter!!.selected != null) {
                 sendAnswer(currentSurvey!!.nameId,adapter!!.question!!.id,adapter!!.selected!!)
             }
-            else{
+            else {
                 runOnUiThread {
                     Toast.makeText(this,"UPPS",Toast.LENGTH_SHORT)
                 }
@@ -137,29 +128,24 @@ class MainActivity : AppCompatActivity() {
                 nextQuestion()
             }
         }
-
     }
 
-    val JSON: MediaType? = "application/json; charset=utf-8".toMediaTypeOrNull()
-
-
-    fun sendAnswer(nameId:String, Qid:Int,Aid:Int) {
+    private fun sendAnswer(nameId:String, Qid:Int, Aid:Int) {
 
         val client = OkHttpClient()
-        val url = URL("http://192.168.178.41:8080/survey/${nameId}/answer")
+        val url = URL(HOST + "/survey/${nameId}/answer")
 
         val json = """{
             "questionId":${Qid},
             "answerId":${Aid}
             }""".trimMargin()
 
-        val body = RequestBody.create(JSON,json);
-
+        val body = json.toRequestBody(mediaTypeJson)
 
         val request = Request.Builder()
             .url(url)
             .post(body)
-            .addHeader("Authorization","Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNmVlZTYwNi00YTE0LTRlZWUtODIwYi03MzhlMDg0Yjg2NWIifQ.xoa28DDYgWUEIV_oP2-MTmuXnDprSyUE9Rs-sf-m-jPdLpY_iGrVHmfDC4Cz3fVd0btX9wvHzF7lZsvbZ0dyeA")
+            .addHeader("Authorization", TOKEN)
             .addHeader("Content-Type","application/json")
             .build()
 
@@ -169,22 +155,18 @@ class MainActivity : AppCompatActivity() {
         print(response.code)
 
         //Response
-        println("Response Body: " + responseBody)
+        println("Response Body: $responseBody")
 
-    }
-
-    fun getSurvey(){
-        "http://localhost:8080".httpGet().header("Authorization","Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNmVlZTYwNi00YTE0LTRlZWUtODIwYi03MzhlMDg0Yjg2NWIifQ.xoa28DDYgWUEIV_oP2-MTmuXnDprSyUE9Rs-sf-m-jPdLpY_iGrVHmfDC4Cz3fVd0btX9wvHzF7lZsvbZ0dyeA")
     }
 
     fun get() {
         val client = OkHttpClient()
-        val url = URL("http://192.168.178.41:8080/survey/REGULAR")
+        val url = URL("$HOST/survey/REGULAR")
 
         val request = Request.Builder()
             .url(url)
             .get()
-            .addHeader("Authorization","Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxNmVlZTYwNi00YTE0LTRlZWUtODIwYi03MzhlMDg0Yjg2NWIifQ.xoa28DDYgWUEIV_oP2-MTmuXnDprSyUE9Rs-sf-m-jPdLpY_iGrVHmfDC4Cz3fVd0btX9wvHzF7lZsvbZ0dyeA")
+            .addHeader("Authorization", TOKEN)
             .build()
 
 
@@ -193,21 +175,17 @@ class MainActivity : AppCompatActivity() {
         val responseBody = response.body!!.string()
 
         //Response
-        println("Response Body: " + responseBody)
+        println("Response Body: $responseBody")
 
     }
 
     private class MyAdapter(context: MainActivity): BaseAdapter(){
 
-        private val mContext: MainActivity
+        private val mContext: MainActivity = context
 
         var type:AnswerType = AnswerType.MultipleChoice
         var question:Question? = null
         var selected:Int? = null
-
-        init {
-            mContext = context
-        }
 
         fun setCurrentQuestion(q:Question){
             this.question = q
@@ -235,15 +213,15 @@ class MainActivity : AppCompatActivity() {
         override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
             val layoutInActivity = LayoutInflater.from(mContext)
 
-            when(type){
+            when(type) {
                 AnswerType.MultipleChoice -> {
                     val cell = layoutInActivity.inflate(R.layout.multiple_choice_question,parent,false)
-                    var textview = cell.findViewById<TextView>(R.id.answerTextview)
+                    val textview = cell.findViewById<TextView>(R.id.answerTextview)
                     val constLayOut = textview.layoutParams as ConstraintLayout.LayoutParams
                     textview.text = question!!.answers!![position].value
                     cell.setOnClickListener {
 
-                        var textview = it.findViewById<TextView>(R.id.answerTextview)
+                        val textview = it.findViewById<TextView>(R.id.answerTextview)
                         val constLayOut = textview.layoutParams as ConstraintLayout.LayoutParams
 
                         selected = position
@@ -272,7 +250,6 @@ class MainActivity : AppCompatActivity() {
                     return cell
                 }
             }
-
 
             return View(mContext)
         }
