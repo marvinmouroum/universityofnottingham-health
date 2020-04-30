@@ -9,6 +9,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.net.URL
+import kotlin.concurrent.thread
 
 class RegisterActivity:AppCompatActivity() {
 
@@ -20,7 +21,12 @@ class RegisterActivity:AppCompatActivity() {
     private val mediaTypeJson: MediaType? = "application/json; charset=utf-8".toMediaTypeOrNull()
 
     fun verify(view:View){
+        thread {
+            performVerification()
+        }
+    }
 
+    fun performVerification(){
         val client = OkHttpClient()
         val url = URL(UONApp.HOST + "/survey/verify")
 
@@ -40,6 +46,7 @@ class RegisterActivity:AppCompatActivity() {
         val response = client.newCall(request).execute()
 
         val responseBody = response.body!!.string()
+
         print(response.code)
 
         //Response

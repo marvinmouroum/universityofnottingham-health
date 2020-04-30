@@ -32,6 +32,7 @@ class StartActivity: AppCompatActivity() {
         if(checkIfVerified() == false){
             val intent = Intent(this,RegisterActivity::class.java)
             startActivity(intent)
+            return
         }
 
         thread {
