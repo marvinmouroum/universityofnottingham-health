@@ -217,18 +217,6 @@ class MainActivity : AppCompatActivity() {
             val layoutInActivity = LayoutInflater.from(mContext)
 
             when(type) {
-<<<<<<< HEAD
-                AnswerType.MultipleChoice -> {
-                    val cell = layoutInActivity.inflate(R.layout.multiple_choice_question,parent,false)
-                    val textview = cell.findViewById<TextView>(R.id.answerTextview)
-                    val constLayOut = textview.layoutParams as ConstraintLayout.LayoutParams
-                    textview.text = question!!.answers!![position].value
-
-                    cell.setOnClickListener {
-                        selected = position
-                        this@MyAdapter.notifyDataSetChanged()
-                    }
-=======
                 AnswerType.MultipleChoice -> return getChoiceView(position, parent, layoutInActivity)
                 AnswerType.Boolean -> return getBoolView(position, parent, layoutInActivity)
                 AnswerType.Range -> return null
@@ -247,7 +235,6 @@ class MainActivity : AppCompatActivity() {
             val textview = cell.findViewById<TextView>(R.id.answerTextview)
             val constLayOut = textview.layoutParams as ConstraintLayout.LayoutParams
             textview.text = question!!.answers!![position].value
->>>>>>> 4cc4c017369970dea6e8773c0a4c8d9040c08fb9
 
             cell.setOnClickListener {
                 selected = position

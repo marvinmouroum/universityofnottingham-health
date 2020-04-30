@@ -15,7 +15,7 @@ import okhttp3.Request
 import java.net.URL
 import kotlin.concurrent.thread
 
-class StartSurvey: AppCompatActivity() {
+class StartActivity: AppCompatActivity() {
 
     var surveyString:String? = null
     var currentSurvey:Survey? = null
