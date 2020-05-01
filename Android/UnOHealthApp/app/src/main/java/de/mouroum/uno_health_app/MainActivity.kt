@@ -9,9 +9,8 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import de.mouroum.uno_health_app.UONApp.Companion.HOST
-import de.mouroum.uno_health_app.UONApp.Companion.TOKEN
+import de.mouroum.uno_health_app.UONApp.Companion.MEDIA_TYPE_JSON
 import okhttp3.*
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.lang.Thread.sleep
 import java.net.URL
@@ -28,9 +27,9 @@ class MainActivity : AppCompatActivity() {
 
     private var onQuestion:Int = 0
 
-    private val mediaTypeJson: MediaType? = "application/json; charset=utf-8".toMediaTypeOrNull()
-
     private val fragment = GeneralFragment.newInstance(R.layout.question_container)
+
+    var prefs: Prefs? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,13 +37,10 @@ class MainActivity : AppCompatActivity() {
 
         currentSurvey = intent.extras?.get("survey") as Survey
         adapter = MyAdapter(this)
+        prefs = Prefs(this)
 
         openQuestion()
         nextQuestion()
-
-        thread {
-            get()
-        }
     }
 
     private fun nextQuestion(){
@@ -140,12 +136,12 @@ class MainActivity : AppCompatActivity() {
             "answerId":${Aid}
             }""".trimMargin()
 
-        val body = json.toRequestBody(mediaTypeJson)
+        val body = json.toRequestBody(MEDIA_TYPE_JSON)
 
         val request = Request.Builder()
             .url(url)
             .post(body)
-            .addHeader("Authorization", TOKEN)
+            .addHeader("Authorization", prefs!!.token!!)
             .addHeader("Content-Type","application/json")
             .build()
 
@@ -153,26 +149,6 @@ class MainActivity : AppCompatActivity() {
 
         val responseBody = response.body!!.string()
         print(response.code)
-
-        //Response
-        println("Response Body: $responseBody")
-
-    }
-
-    fun get() {
-        val client = OkHttpClient()
-        val url = URL("$HOST/survey/REGULAR")
-
-        val request = Request.Builder()
-            .url(url)
-            .get()
-            .addHeader("Authorization", TOKEN)
-            .build()
-
-
-        val response = client.newCall(request).execute()
-
-        val responseBody = response.body!!.string()
 
         //Response
         println("Response Body: $responseBody")

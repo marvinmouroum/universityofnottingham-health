@@ -1,15 +1,11 @@
 package de.mouroum.uno_health_app
 
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.view.View
-import android.widget.Toast
-import com.google.gson.Gson
+import androidx.appcompat.app.AppCompatActivity
 import de.mouroum.uno_health_app.UONApp.Companion.HOST
-import de.mouroum.uno_health_app.UONApp.Companion.TOKEN
-import kotlinx.android.synthetic.main.survey_start.*
+import kotlinx.android.synthetic.main.action_container.*
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.net.URL
@@ -17,76 +13,76 @@ import kotlin.concurrent.thread
 
 class StartActivity: AppCompatActivity() {
 
-    var surveyString:String? = null
-    var currentSurvey:Survey? = null
-
-    val PREFS_FILENAME = "de.mouroum.uno_health_app.prefs"
-    var prefs: SharedPreferences? = null
+    private var prefs: Prefs? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.survey_start)
+        prefs = Prefs(this)
+        setContentView(R.layout.action_container)
 
-        prefs = this.getSharedPreferences(PREFS_FILENAME, 0)
+        validate(false)
+    }
 
-        if(checkIfVerified() == false){
-            val intent = Intent(this,RegisterActivity::class.java)
-            startActivity(intent)
-            return
-        }
-
+    private fun validate(isUserInput: Boolean) {
         thread {
-            get()
+            resetUI()
+
+            if (isUserInput)
+                Thread.sleep(1000)
+
+            val verified = validateVerification();
+            updateUI(verified)
         }
     }
 
-    fun get() {
+    private fun resetUI() {
+
+        runOnUiThread {
+            actionTitle.text = getString(R.string.verify_access)
+            actionMessage.text = null
+            button.visibility = View.INVISIBLE
+            progressBar.visibility = View.VISIBLE
+        }
+    }
+
+    private fun updateUI(verified: Boolean) {
+
+        runOnUiThread {
+
+            if (verified) {
+                val intent = Intent(this, LoadSurveyActivity::class.java)
+                startActivity(intent)
+
+                return@runOnUiThread
+            }
+
+            actionTitle.text = getString(R.string.invalid_access)
+            actionMessage.text = getString(R.string.invalid_access_description)
+            button.visibility = View.VISIBLE
+            button.text = getString(R.string.retry)
+            button.setOnClickListener { validate(true) }
+            progressBar.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun validateVerification(): Boolean {
+        val token = prefs!!.token ?: return false
+
         val client = OkHttpClient()
-        val url = URL("$HOST/survey/BASIC")
+        val url = URL("$HOST/check")
 
         val request = Request.Builder()
             .url(url)
             .get()
-            .addHeader("Authorization", TOKEN)
+            .addHeader("Authorization", "Bearer $token")
             .build()
 
-        val response = client.newCall(request).execute()
-        val responseBody = response.body!!.string()
-
-        //Response
-        println("Response Body: $responseBody")
-        surveyString = responseBody
-
-        convertSurvey()
-    }
-
-    private fun convertSurvey() {
-        val result = Gson().fromJson(surveyString, Survey::class.java)
-        currentSurvey = result
-        display()
-    }
-
-    private fun display(){
-        surveyText.text = currentSurvey?.description ?: "This survey has no description"
-        val text = "${currentSurvey?.questions?.size ?: 0} Questions"
-        surveySummary.text = text
-    }
-
-    fun jump(view:View){
-
-        if (currentSurvey != null) {
-            val intent = Intent(this, MainActivity::class.java)
-            intent.putExtra("survey", currentSurvey)
-            startActivity(intent)
+        return try {
+            val response = client.newCall(request).execute()
+            println(response)
+            response.isSuccessful
+        } catch (e: Exception) {
+            false
         }
-        else{
-            Toast.makeText(this,"The download failed",Toast.LENGTH_LONG)
-            get()
-        }
-    }
-
-    fun checkIfVerified():Boolean{
-
-        return prefs?.getBoolean("VERIFY",false) ?: false
     }
 }

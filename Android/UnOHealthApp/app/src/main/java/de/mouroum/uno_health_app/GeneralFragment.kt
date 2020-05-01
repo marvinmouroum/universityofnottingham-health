@@ -5,27 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.github.kittinunf.fuel.httpGet
 
-class GeneralFragment(layout:Int):Fragment() {
+class GeneralFragment(var layout: Int):Fragment() {
 
     //2
     companion object {
 
         fun newInstance(id:Int): GeneralFragment {
-
-            val instance = GeneralFragment(id)
-
-            return instance
+            return GeneralFragment(id)
         }
     }
 
-    var layout:Int
     var createdView:View? = null
-
-    init {
-        this.layout = layout
-    }
 
     //3
     override fun onCreateView(inflater: LayoutInflater,

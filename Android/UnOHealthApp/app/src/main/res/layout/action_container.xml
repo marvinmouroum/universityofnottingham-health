@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/action_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="10pt"
+    android:background="@drawable/round_rect"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="313dp"
+        android:layout_height="146dp"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="23dp"
+        android:contentDescription="@string/logo_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/uon_logo" />
+
+    <TextView
+        android:id="@+id/actionTitle"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginLeft="10pt"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="10pt"
+        android:gravity="center"
+        android:textAlignment="textStart"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <TextView
+        android:id="@+id/actionMessage"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="23dp"
+        android:layout_marginBottom="46dp"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/actionTitle" />
+
+    <Button
+        android:id="@+id/button"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="25pt"
+        android:layout_marginLeft="10pt"
+        android:layout_marginRight="10pt"
+        android:layout_marginBottom="10pt"
+        android:background="@drawable/round_rect_purple"
+
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,6 +7,7 @@ data class Survey (
     val questions:List<Question>,
     val nameId:String,
     val version:Int,
+    val title:String,
     val description:String
 ) : Serializable
 
