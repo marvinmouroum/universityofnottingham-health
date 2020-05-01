@@ -1,10 +1,14 @@
 package de.mouroum.uno_health_app
 
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.hardware.Sensor
+import android.hardware.SensorManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.view.View
+import android.widget.Button
 import android.widget.Toast
 import com.google.gson.Gson
 import de.mouroum.uno_health_app.UONApp.Companion.HOST
@@ -31,13 +35,15 @@ class StartSurvey: AppCompatActivity() {
 
         if(checkIfVerified() == false){
             val intent = Intent(this,RegisterActivity::class.java)
-            startActivity(intent)
-            return
+            //startActivity(intent)
+            //return
         }
 
         thread {
             get()
         }
+
+        clicked(View(this))
     }
 
     fun get() {
@@ -49,6 +55,8 @@ class StartSurvey: AppCompatActivity() {
             .get()
             .addHeader("Authorization", TOKEN)
             .build()
+
+        return
 
         val response = client.newCall(request).execute()
         val responseBody = response.body!!.string()
@@ -88,5 +96,55 @@ class StartSurvey: AppCompatActivity() {
     fun checkIfVerified():Boolean{
 
         return prefs?.getBoolean("VERIFY",false) ?: false
+    }
+
+
+    var sm:SensorManager? =null
+
+    var sLightCurrent:Float = 0.0f
+    var listener:SensorListener = SensorListener()
+
+    private var smLight:Sensor? = null
+
+    //part for step counter
+    fun clicked(view:View){
+        sLightCurrent = listener.reference
+
+        sm = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        val sensorList = sm!!.getSensorList(Sensor.TYPE_ALL)
+
+        var sensorListString = ""
+        for(sensor in sensorList){
+            sensorListString += sensor.name + "\n"
+        }
+
+        println(sensorListString)
+
+        listener.context = this
+
+        reactToSensor(Sensor.TYPE_STEP_COUNTER)
+
+    }
+
+    fun reactToSensor(sensor:Int){
+
+        val found = sm?.getDefaultSensor(sensor)
+
+        if(found != null) {
+            smLight = found
+            sm?.unregisterListener(listener)
+            sm?.registerListener(listener,smLight, SensorManager.SENSOR_DELAY_NORMAL)
+
+            thread {
+                Thread.sleep(100)
+                runOnUiThread{
+                    println("The value is " + listener.reference.toString())
+                }
+            }
+
+        }
+        else{
+            println("sensor error")
+        }
     }
 }
