@@ -25,6 +25,8 @@
                 android:layout_width="0dp"
                 android:layout_height="20pt"
                 android:layout_weight=".5"
+                android:paddingStart="0dp"
+                android:paddingEnd="10dp"
                 android:textSize="18sp" />
 
             <TextView
@@ -32,6 +34,8 @@
                 android:layout_width="0dp"
                 android:layout_height="20pt"
                 android:layout_weight=".5"
+                android:paddingStart="10dp"
+                android:paddingEnd="0dp"
                 android:textSize="18sp" />
 
         </LinearLayout>
@@ -45,33 +49,42 @@
                 android:id="@+id/seekBar"
                 style="@style/Widget.AppCompat.SeekBar"
                 android:layout_width="match_parent"
-                android:layout_height="105dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center|center_vertical"
+                android:progressDrawable="@drawable/seekbar_style"
+                android:splitTrack="false"
+                android:thumb="@drawable/custom_thumb"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/minValueText"
-                android:layout_width="10pt"
-                android:layout_height="10pt"
-                android:layout_marginTop="40dp"
-                android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="@+id/seekBar"
-                app:layout_constraintStart_toStartOf="@+id/seekBar"
-                app:layout_constraintTop_toTopOf="@+id/seekBar" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/seekBar">
 
-            <TextView
-                android:id="@+id/maxValueText"
-                android:layout_width="10pt"
-                android:layout_height="10pt"
-                android:layout_marginTop="40dp"
-                android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="@+id/seekBar"
-                app:layout_constraintEnd_toEndOf="@+id/seekBar"
-                app:layout_constraintTop_toTopOf="@+id/seekBar" />
+                <TextView
+                    android:id="@+id/minValueText"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight=".5"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="10dp"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/maxValueText"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"
+                    android:layout_weight=".5"
+                    android:gravity="end"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="0dp"
+                    android:textSize="18sp" />
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
