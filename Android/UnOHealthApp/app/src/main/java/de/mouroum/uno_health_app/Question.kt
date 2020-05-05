@@ -20,23 +20,42 @@ data class SubQuestion(
     val container:Container?
 ) : Serializable
 
-data class Answer( val id:Int, val value:String) : Serializable
+data class Answer( val id:Long, val value:String) : Serializable
 
 data class Container(
     val subQuestions:List<SubQuestion>,
-    val choiceDependsOn:List<Int>,
+    val choiceDependsOn:List<Long>,
     val boolDependsOn:Boolean
 ) : Serializable
 
 data class Question (
-    val id:Int,
-    val type: String,
+    val id:Long,
+    val type: AnswerType,
     val question: String,
     val order:Int,
     val defaultAnswer:Answer?,
     val container: Container?,
 
     val answers:List<Answer>,
-    val multiple:Boolean
+    val multiple:Boolean,
+    val multiline:Boolean,
+
+    // Slider
+    val minValue:Int,
+    val maxValue:Int,
+    val minText:String,
+    val maxText:String
 
 ) : Serializable
+
+data class SurveyResponse(
+    val questionId: Long,
+    val answerIds: List<Long>?,
+    val boolAnswer: Boolean?,
+    val textAnswer: String?,
+    val rangeAnswer: Int?
+)
+
+enum class AnswerType {
+    BOOL , CHOICE, TEXT, TITLE, RANGE
+}

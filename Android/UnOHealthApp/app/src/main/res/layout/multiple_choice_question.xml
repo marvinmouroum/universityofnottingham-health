@@ -7,12 +7,11 @@
     android:background="@drawable/round_rect_purple">
 
     <TextView
-        android:layout_width="0dp"
-        android:layout_height="80dp"
-        android:background="@drawable/round_rect_white"
-        android:gravity="center"
-        android:text="Question Text"
         android:id="@+id/answerTextview"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:background="@drawable/round_rect_white"
+        android:gravity="center|center_vertical"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

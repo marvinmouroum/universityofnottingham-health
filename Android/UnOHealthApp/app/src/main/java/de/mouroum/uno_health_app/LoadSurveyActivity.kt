@@ -115,8 +115,8 @@ class LoadSurveyActivity  : AppCompatActivity() {
             intent.putExtra("survey", currentSurvey)
             startActivity(intent)
         }
-        else{
-            Toast.makeText(this,"The download failed", Toast.LENGTH_LONG)
+        else {
+            Toast.makeText(this,"The download failed", Toast.LENGTH_LONG).show()
         }
     }
 }

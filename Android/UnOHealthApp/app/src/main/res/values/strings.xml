@@ -5,6 +5,9 @@
     <string name="invalid_access_description">Please request access in order to use this App.</string>
     <string name="retry">Retry</string>
     <string name="survey_start">Start</string>
+    <string name="survey_next">Next</string>
+    <string name="answer_yes">Yes</string>
+    <string name="answer_no">No</string>
     <string name="logo_description">Logo of the University of Nottingham</string>
     <string name="register_access">Registering…</string>
     <string name="register_failed">Registration failed</string>
