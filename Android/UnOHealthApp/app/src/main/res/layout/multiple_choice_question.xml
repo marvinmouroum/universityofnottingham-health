@@ -7,14 +7,14 @@
     android:background="@drawable/round_rect_purple">
 
     <TextView
-        android:id="@+id/answerTextview"
+        android:id="@+id/answerTextView"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:background="@drawable/round_rect_white"
         android:gravity="center|center_vertical"
-
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

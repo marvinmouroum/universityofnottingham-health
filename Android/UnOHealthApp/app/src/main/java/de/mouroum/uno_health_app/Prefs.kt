@@ -22,4 +22,8 @@ class Prefs (context: Context) {
     var currentQuestionId: Long
         get() = prefs.getLong(keyCurrentQuestionId, -1)
         set(value) = prefs.edit().putLong(keyCurrentQuestionId, value).apply()
+
+    fun reset() {
+        prefs.edit().clear().apply()
+    }
 }

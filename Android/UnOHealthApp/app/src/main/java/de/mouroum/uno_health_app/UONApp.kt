@@ -3,9 +3,6 @@ package de.mouroum.uno_health_app
 import android.app.Application
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import java.net.URL
 
 class UONApp: Application() {
 

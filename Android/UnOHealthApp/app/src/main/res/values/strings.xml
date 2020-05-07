@@ -8,8 +8,10 @@
     <string name="survey_next">Next</string>
     <string name="answer_yes">Yes</string>
     <string name="answer_no">No</string>
+    <string name="answer_hint">Type your answer…</string>
     <string name="logo_description">Logo of the University of Nottingham</string>
     <string name="register_access">Registering…</string>
     <string name="register_failed">Registration failed</string>
     <string name="register_failed_description">Please request access again or retry to register later.</string>
+    <string name="error_send_answer">Unable to send answer to the server.</string>
 </resources>

@@ -27,13 +27,21 @@
         android:id="@+id/answerList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="10pt"
+        android:layout_marginStart="5pt"
+        android:layout_marginEnd="5pt"
+        android:layout_marginTop="10pt"
+        android:layout_marginBottom="10pt"
+        android:paddingStart="5pt"
+        android:paddingEnd="5pt"
         android:divider="#FFFFFF"
         android:dividerHeight="10pt"
         app:layout_constraintBottom_toTopOf="@id/questionButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/questionTitle" />
+        app:layout_constraintTop_toBottomOf="@id/questionTitle"
+        android:scrollbarStyle="outsideOverlay">
+
+    </ListView>
 
     <Button
         android:id="@+id/questionButton"
@@ -51,5 +59,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

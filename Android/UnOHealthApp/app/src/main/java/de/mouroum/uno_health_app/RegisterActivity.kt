@@ -84,14 +84,13 @@ class RegisterActivity:AppCompatActivity() {
 
         try {
             val response = client.newCall(request).execute()
-            println(response)
 
             if (!response.isSuccessful)
                 return false
 
             val authNToken = response.body!!.string()
-            println(authNToken)
 
+            prefs!!.reset()
             prefs!!.token = authNToken
             return true
 
