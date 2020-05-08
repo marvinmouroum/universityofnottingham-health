@@ -82,6 +82,8 @@ class StartSurvey: AppCompatActivity() {
 
     fun jump(view:View){
 
+        clicked(View(this))
+
         if (currentSurvey != null) {
             val intent = Intent(this, MainActivity::class.java)
             intent.putExtra("survey", currentSurvey)
