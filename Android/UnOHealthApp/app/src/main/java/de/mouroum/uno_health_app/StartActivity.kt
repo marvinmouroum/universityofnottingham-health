@@ -2,6 +2,7 @@ package de.mouroum.uno_health_app
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import de.mouroum.uno_health_app.UONApp.Companion.HOST
@@ -30,7 +31,7 @@ class StartActivity: AppCompatActivity() {
             if (isUserInput)
                 Thread.sleep(1000)
 
-            val verified = validateVerification();
+            val verified = validateVerification()
             updateUI(verified)
         }
     }
@@ -82,6 +83,7 @@ class StartActivity: AppCompatActivity() {
             println(response)
             response.isSuccessful
         } catch (e: Exception) {
+            Log.e("authorization", "check failed", e)
             false
         }
     }
