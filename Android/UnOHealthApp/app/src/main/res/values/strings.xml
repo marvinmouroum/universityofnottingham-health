@@ -14,4 +14,6 @@
     <string name="register_failed">Registration failed</string>
     <string name="register_failed_description">Please request access again or retry to register later.</string>
     <string name="error_send_answer">Unable to send answer to the server.</string>
+    <string name="load_survey_failed">Failed to load survey</string>
+    <string name="try_again">Please try again later.</string>
 </resources>

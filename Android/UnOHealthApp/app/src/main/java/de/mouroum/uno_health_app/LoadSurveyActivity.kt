@@ -2,121 +2,76 @@ package de.mouroum.uno_health_app
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.google.gson.Gson
+import androidx.lifecycle.lifecycleScope
 import kotlinx.android.synthetic.main.action_container.*
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import java.lang.Exception
-import java.net.URL
-import kotlin.concurrent.thread
+import kotlinx.coroutines.launch
+import retrofit2.HttpException
 
-class LoadSurveyActivity  : AppCompatActivity() {
 
-    var currentSurvey:Survey? = null
-    var prefs: Prefs? = null
+const val TAG = "LoadSurveyActivity"
+
+class LoadSurveyActivity : AppCompatActivity() {
+    val prefs by lazy { Prefs(this) }
+    val api by lazy { (application as UONApp).api }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        prefs = Prefs(this)
         setContentView(R.layout.action_container)
 
-        loadSurvey(false)
+        loadSurvey()
     }
 
-    private fun loadSurvey(isUserInput: Boolean) {
-        thread {
-            resetUI()
-
-            if (isUserInput)
-                Thread.sleep(1000)
-
-            updateUI(load(prefs!!.currentSurveyId))
-        }
-    }
-
-    private fun resetUI() {
-
-        runOnUiThread {
-            actionTitle.text = getString(R.string.register_access)
-            actionMessage.text = null
-            button.visibility = View.INVISIBLE
-            progressBar.visibility = View.VISIBLE
-        }
-    }
-
-    private fun updateUI(success: Boolean) {
-
-        runOnUiThread {
-
-            if (success) {
-                val text = currentSurvey?.description ?: "This survey has no description"
-                val description = "$text\n\n[${currentSurvey?.questions?.size ?: 0} Questions]"
-                val title = currentSurvey?.title ?: null
-
-                actionTitle.text = title
-                actionMessage.text = description
-                button.visibility = View.VISIBLE
-                button.text = getString(R.string.survey_start)
-                button.setOnClickListener { jump() }
-                progressBar.visibility = View.INVISIBLE
-
-            } else {
-                actionTitle.text = "Failed to load survey"
-                actionMessage.text = "Please try again later."
-                button.visibility = View.VISIBLE
-                button.text = getString(R.string.retry)
-                button.setOnClickListener { loadSurvey(true) }
-                progressBar.visibility = View.INVISIBLE
+    private fun loadSurvey() {
+        lifecycleScope.launch {
+            loading()
+            try {
+                val survey = api.survey(prefs.currentSurveyId, "Bearer ${prefs.token}")
+                success(survey)
+            } catch (e: HttpException) {
+                error(e)
             }
         }
     }
 
-    private fun load(surveyId: String) :Boolean {
-
-        val token = prefs!!.token ?: return false
-
-        val client = OkHttpClient()
-        val url = URL("${UONApp.HOST}/survey/$surveyId")
-
-        val request = Request.Builder()
-            .url(url)
-            .get()
-            .addHeader("Authorization", "Bearer $token")
-            .build()
-
-        try {
-            val response = client.newCall(request).execute()
-
-            if (!response.isSuccessful)
-                return false
-
-            val responseBody = response.body!!.string()
-
-            convertSurvey(responseBody)
-            return true
-        } catch (e :Exception) {
-            return false
-        }
+    private fun loading() {
+        actionTitle.text = getString(R.string.register_access)
+        actionMessage.text = null
+        button.visibility = View.INVISIBLE
+        progressBar.visibility = View.VISIBLE
     }
 
-    private fun convertSurvey(surveyString: String) {
-        val result = Gson().fromJson(surveyString, Survey::class.java)
-        currentSurvey = result
+    private fun success(survey: Survey) {
+        val text = survey.description
+        val description = "$text\n\n[${survey.questions.size} Questions]"
+        val title = survey.title
+
+        actionTitle.text = title
+        actionMessage.text = description
+        button.visibility = View.VISIBLE
+        button.text = getString(R.string.survey_start)
+        button.setOnClickListener { jump(survey) }
+        progressBar.visibility = View.INVISIBLE
     }
 
-    private fun jump(){
+    private fun error(e: Throwable) {
+        Log.e(TAG, "Error while loading survey", e)
+        actionTitle.setText(R.string.load_survey_failed)
+        actionMessage.setText(R.string.try_again)
+        button.visibility = View.VISIBLE
+        button.setText(R.string.retry)
+        button.setOnClickListener {
+            loadSurvey()
+        }
+        progressBar.visibility = View.INVISIBLE
+    }
 
-        if (currentSurvey != null) {
-            val intent = Intent(this, MainActivity::class.java)
-            intent.putExtra("survey", currentSurvey)
-            startActivity(intent)
-        }
-        else {
-            Toast.makeText(this,"The download failed", Toast.LENGTH_LONG).show()
-        }
+    private fun jump(survey: Survey) {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.putExtra("survey", survey)
+        startActivity(intent)
     }
 }

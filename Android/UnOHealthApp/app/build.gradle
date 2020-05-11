@@ -47,8 +47,18 @@ dependencies {
     implementation 'com.github.kittinunf.fuel:fuel:2.2.0'
 
     //packages
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.0"
+
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0"
+
+    implementation 'com.squareup.retrofit2:retrofit:2.8.1'
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.1'
     implementation 'com.github.kittinunf.fuel:fuel-coroutines:2.2.0'
     implementation 'com.squareup.okhttp3:okhttp:4.5.0'
+
+
 
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
