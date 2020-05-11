@@ -11,9 +11,7 @@ import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 
 
-class MainAdapter(context: MainActivity) : BaseAdapter() {
-
-    private val mContext: MainActivity = context
+class MainAdapter : BaseAdapter() {
 
     var question: Question? = null
 
@@ -52,8 +50,8 @@ class MainAdapter(context: MainActivity) : BaseAdapter() {
         return ""
     }
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View? {
-        val layoutInActivity = LayoutInflater.from(mContext)
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
+        val layoutInActivity = LayoutInflater.from(parent.context)
 
         if (question == null) return null
 
@@ -68,7 +66,7 @@ class MainAdapter(context: MainActivity) : BaseAdapter() {
 
     private fun getSliderView(
         position: Int,
-        parent: ViewGroup?,
+        parent: ViewGroup,
         layoutInActivity: LayoutInflater
     ): View? {
 
@@ -113,17 +111,15 @@ class MainAdapter(context: MainActivity) : BaseAdapter() {
             }
         )
 
-        if (parent != null) {
-            cell.layoutParams.height = parent.height
-            cell.requestLayout()
-        }
+        cell.layoutParams.height = parent.height
+        cell.requestLayout()
 
         return cell
     }
 
     private fun getTextView(
         position: Int,
-        parent: ViewGroup?,
+        parent: ViewGroup,
         layoutInActivity: LayoutInflater
     ): View {
 
@@ -149,9 +145,9 @@ class MainAdapter(context: MainActivity) : BaseAdapter() {
                 println(selectedText)
             }
 
-            override fun beforeTextChanged(s:CharSequence, start:Int, count:Int, after:Int) {}
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
-            override fun onTextChanged(s:CharSequence, start:Int, count:Int, after:Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
         }
 
         editor.addTextChangedListener(watcher)
@@ -159,10 +155,8 @@ class MainAdapter(context: MainActivity) : BaseAdapter() {
         filterArray[0] = LengthFilter(question!!.length)
         editor.filters = filterArray
 
-        if (parent != null) {
-            cell.layoutParams.height = parent.height
-            cell.requestLayout()
-        }
+        cell.layoutParams.height = parent.height
+        cell.requestLayout()
 
         return cell
     }
@@ -173,7 +167,7 @@ class MainAdapter(context: MainActivity) : BaseAdapter() {
 
     private fun getChoiceView(
         position: Int,
-        parent: ViewGroup?,
+        parent: ViewGroup,
         layoutInActivity: LayoutInflater
     ): View {
 
@@ -213,20 +207,16 @@ class MainAdapter(context: MainActivity) : BaseAdapter() {
 
     private fun getBoolView(
         position: Int,
-        parent: ViewGroup?,
+        parent: ViewGroup,
         layoutInActivity: LayoutInflater
     ): View {
-        val answer =
-            if (position == 1) mContext.resources.getString(R.string.answer_no)
-            else mContext.resources.getString(R.string.answer_yes)
+        val answer = if (position == 1) R.string.answer_no else R.string.answer_yes
 
         val cell = layoutInActivity.inflate(R.layout.multiple_choice_question, parent, false)
-        val textview = cell.findViewById<TextView>(
-            R.id.answerTextView
-        )
+        val textview = cell.findViewById<TextView>(R.id.answerTextView)
         val constLayOut = textview.layoutParams as ConstraintLayout.LayoutParams
 
-        textview.text = answer
+        textview.setText(answer)
 
         cell.setOnClickListener {
             selectedBool = position == 0
@@ -247,7 +237,7 @@ class MainAdapter(context: MainActivity) : BaseAdapter() {
 
     private fun getChecklistView(
         position: Int,
-        parent: ViewGroup?,
+        parent: ViewGroup,
         layoutInActivity: LayoutInflater
     ): View {
 
