@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">UON Covid App</string>
-    <string name="verify_access">Verifying Access Token…</string>
-    <string name="invalid_access">Invalid Access Token</string>
+    <string name="verify_access">Verifying Access…</string>
+    <string name="invalid_access">Invalid Access</string>
     <string name="invalid_access_description">Please request access in order to use this App.</string>
     <string name="retry">Retry</string>
     <string name="survey_start">Start</string>

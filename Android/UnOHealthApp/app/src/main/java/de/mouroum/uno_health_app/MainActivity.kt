@@ -257,7 +257,6 @@ class MainActivity : AppCompatActivity() {
 
         val gson = Gson()
         val json = gson.toJson(answer)
-        println(json)
 
         val body = json.toRequestBody(MEDIA_TYPE_JSON)
 
