@@ -3,7 +3,6 @@ package de.mouroum.uno_health_app
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.action_container.*
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -11,14 +10,12 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import java.net.URL
 import kotlin.concurrent.thread
 
-class RegisterActivity:AppCompatActivity() {
+class RegisterActivity : BaseActivity() {
 
-    private var prefs: Prefs? = null
     private var token: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        prefs = Prefs(this)
         token = intent.data?.path?.substring(1)
         setContentView(R.layout.action_container)
 
@@ -67,7 +64,7 @@ class RegisterActivity:AppCompatActivity() {
         }
     }
 
-    private fun performVerification() : Boolean {
+    private fun performVerification(): Boolean {
 
         if (token == null)
             return false
@@ -90,8 +87,8 @@ class RegisterActivity:AppCompatActivity() {
 
             val authNToken = response.body!!.string()
 
-            prefs!!.reset()
-            prefs!!.token = authNToken
+            prefs.reset()
+            prefs.token = authNToken
             return true
 
         } catch (e: Exception) {

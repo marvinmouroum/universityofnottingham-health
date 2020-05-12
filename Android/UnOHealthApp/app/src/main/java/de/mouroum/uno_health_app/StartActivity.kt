@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import de.mouroum.uno_health_app.UONApp.Companion.HOST
 import kotlinx.android.synthetic.main.action_container.*
 import okhttp3.OkHttpClient
@@ -12,15 +11,11 @@ import okhttp3.Request
 import java.net.URL
 import kotlin.concurrent.thread
 
-class StartActivity: AppCompatActivity() {
-
-    private var prefs: Prefs? = null
+class StartActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        prefs = Prefs(this)
         setContentView(R.layout.action_container)
-
         validate(false)
     }
 
@@ -67,7 +62,7 @@ class StartActivity: AppCompatActivity() {
     }
 
     private fun validateVerification(): Boolean {
-        val token = prefs!!.token ?: return false
+        val token = prefs.token ?: return false
 
         val client = OkHttpClient()
         val url = URL("$HOST/check")

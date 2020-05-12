@@ -23,4 +23,8 @@ class UONApp: Application() {
             .build()
         retrofit.create(SurveyApi::class.java)
     }
+
+    val prefs by lazy {
+        Prefs(this)
+    }
 }

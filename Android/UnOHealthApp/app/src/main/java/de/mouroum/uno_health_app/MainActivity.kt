@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.annotation.MainThread
-import androidx.appcompat.app.AppCompatActivity
 import com.google.gson.Gson
 import de.mouroum.uno_health_app.UONApp.Companion.HOST
 import de.mouroum.uno_health_app.UONApp.Companion.MEDIA_TYPE_JSON
@@ -17,7 +16,7 @@ import java.lang.Thread.sleep
 import java.net.URL
 import kotlin.concurrent.thread
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     private val adapter = MainAdapter()
 
@@ -26,10 +25,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private var onQuestion: Int = 0
-
-    private val prefs by lazy {
-        Prefs(this)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
