@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.android.synthetic.main.action_container.*
 import kotlinx.coroutines.launch
@@ -13,10 +12,7 @@ import retrofit2.HttpException
 
 const val TAG = "LoadSurveyActivity"
 
-class LoadSurveyActivity : AppCompatActivity() {
-    val prefs by lazy { Prefs(this) }
-    val api by lazy { (application as UONApp).api }
-
+class LoadSurveyActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -29,7 +25,7 @@ class LoadSurveyActivity : AppCompatActivity() {
         lifecycleScope.launch {
             loading()
             try {
-                val survey = api.survey(prefs.currentSurveyId, "Bearer ${prefs.token}")
+                val survey = api.survey(prefs.currentSurveyId)
                 success(survey)
             } catch (e: HttpException) {
                 error(e)

@@ -3,10 +3,11 @@ package de.mouroum.uno_health_app
 import android.app.Application
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class UONApp: Application() {
+class UONApp : Application() {
 
     companion object {
 
@@ -17,7 +18,24 @@ class UONApp: Application() {
     }
 
     val api by lazy {
+        val okHttpClient = OkHttpClient.Builder()
+//            .authenticator(object : Authenticator {
+//                override fun authenticate(route: Route?, response: Response): Request? {
+//                    return response.request.newBuilder()
+//                        .header("Authorization", "Bearer ${prefs.token}")
+//                        .build()
+//                }
+//            })
+            .addInterceptor {
+                val request = it.request().newBuilder()
+                    .header("Authorization", "Bearer ${prefs.token}")
+                    .build()
+                it.proceed(request)
+            }
+            .build()
+
         val retrofit: Retrofit = Retrofit.Builder()
+            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl("$HOST/")
             .build()
