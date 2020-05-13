@@ -216,7 +216,6 @@ class MainActivity : BaseActivity() {
 
         val gson = Gson()
         val json = gson.toJson(answer)
-        println(json)
 
         val body = json.toRequestBody(MEDIA_TYPE_JSON)
 

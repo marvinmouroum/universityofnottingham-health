@@ -3,6 +3,8 @@ package de.mouroum.uno_health_app
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.action_container.*
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -12,11 +14,19 @@ import kotlin.concurrent.thread
 
 class RegisterActivity : BaseActivity() {
 
-    private var token: String? = null
+    private var verificationToken: String? = null
+    private var userToken: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        token = intent.data?.path?.substring(1)
+
+        val path = intent.data?.path?.substring(1)
+        val parts = path!!.split('/')
+        verificationToken = parts[0]
+
+        if (parts.size > 1)
+            userToken = parts[1]
+
         setContentView(R.layout.action_container)
 
         register(false)
@@ -64,19 +74,20 @@ class RegisterActivity : BaseActivity() {
         }
     }
 
-    private fun performVerification(): Boolean {
+    private fun performVerification() : Boolean {
 
-        if (token == null)
+        if (verificationToken == null)
             return false
 
         val client = OkHttpClient()
         val url = URL(UONApp.HOST + "/verify")
 
-        val body = token?.toRequestBody(UONApp.MEDIA_TYPE_TEXT)
+        val json = Gson().toJson(Verification(verificationToken!!, userToken))
+        val body = json.toRequestBody(UONApp.MEDIA_TYPE_JSON)
 
         val request = Request.Builder()
             .url(url)
-            .post(body!!)
+            .post(body)
             .build()
 
         try {

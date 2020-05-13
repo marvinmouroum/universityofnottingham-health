@@ -49,6 +49,11 @@ data class SurveyResponse(
     val checklistAnswer: Map<Long, Boolean>?
 )
 
+data class Verification(
+    val verificationToken: String,
+    val confirmationToken: String?
+)
+
 enum class AnswerType {
     BOOL , CHOICE, TEXT, CHECKLIST, RANGE
 }
