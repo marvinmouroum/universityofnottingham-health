@@ -27,9 +27,12 @@ class UONApp : Application() {
 //                }
 //            })
             .addInterceptor {
-                val request = it.request().newBuilder()
-                    .header("Authorization", "Bearer ${prefs.token}")
-                    .build()
+                val token = prefs.token
+                val request =
+                    if (token != null) it.request().newBuilder()
+                        .header("Authorization", "Bearer ${prefs.token}")
+                        .build()
+                    else it.request()
                 it.proceed(request)
             }
             .build()

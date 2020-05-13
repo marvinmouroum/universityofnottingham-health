@@ -8,4 +8,7 @@ interface SurveyApi {
     suspend fun survey(
         @Path("id") id: String
     ): Survey
+
+    @GET("check")
+    suspend fun check()
 }

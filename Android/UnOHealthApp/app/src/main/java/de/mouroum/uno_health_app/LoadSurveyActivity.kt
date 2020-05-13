@@ -10,9 +10,9 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
 
-const val TAG = "LoadSurveyActivity"
-
 class LoadSurveyActivity : BaseActivity() {
+    private val TAG = "LoadSurveyActivity"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -21,15 +21,13 @@ class LoadSurveyActivity : BaseActivity() {
         loadSurvey()
     }
 
-    private fun loadSurvey() {
-        lifecycleScope.launch {
-            loading()
-            try {
-                val survey = api.survey(prefs.currentSurveyId)
-                success(survey)
-            } catch (e: HttpException) {
-                error(e)
-            }
+    private fun loadSurvey() = lifecycleScope.launch {
+        loading()
+        try {
+            val survey = api.survey(prefs.currentSurveyId)
+            success(survey)
+        } catch (e: HttpException) {
+            error(e)
         }
     }
 
