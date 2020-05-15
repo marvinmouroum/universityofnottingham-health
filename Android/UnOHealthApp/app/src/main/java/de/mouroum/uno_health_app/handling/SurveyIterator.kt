@@ -8,66 +8,62 @@ import java.util.*
 
 class SurveyIterator(private var survey: Survey, lastKnownQuestion: Long? = null) {
 
-    private var currentContainer: Container? = null
+    //private var currentContainer: Container? = null
+    private var currentQuestion: Question? = null
     private val questionStack = Stack<Question>()
 
     init {
         stackQuestions(survey.questions)
         lastKnownQuestion?.let {
-            if (it >= 0) {
-                select(it)
+            if (!select(it)) stackQuestions(survey.questions)
+        }
+    }
+
+    fun next(currentAnswer: SurveyResponse? = null): Question? {
+        if (currentAnswer != null) {
+            if (currentQuestion?.id != currentAnswer.questionId) {
+                throw IllegalArgumentException("Expected an answer for current question ${currentQuestion?.id}")
+            }
+            currentQuestion?.container?.let {
+                if (shouldAnswerSubquestions(it, currentAnswer)) {
+                    stackQuestions(it.subQuestions)
+                }
             }
         }
+
+        currentQuestion = if (questionStack.isEmpty()) null else questionStack.pop()
+
+        return currentQuestion
     }
 
-    private fun stackQuestions(container: Container?) {
-        container?.subQuestions?.let {
-            stackQuestions(it)
-        }
-    }
+    private fun stackQuestions(questions: Iterable<Question>) =
+        questionStack.addAll(questions.reversed())
 
-    private fun stackQuestions(questions: List<Question>) {
-        questions.asReversed().forEach {
-            questionStack.push(it)
-        }
-    }
-
-    private fun shouldStackSubQuestions(
+    private fun shouldAnswerSubquestions(
         container: Container,
         currentAnswer: SurveyResponse?
     ): Boolean {
+        // FIXME not clear what container.boolDependsOn represent?
         if (container.boolDependsOn) return true
         return currentAnswer?.answerIds?.intersect(container.choiceDependsOn)?.isNotEmpty()
             ?: false
     }
 
-    fun next(currentAnswer: SurveyResponse? = null): Question? {
-        currentContainer?.let {
-            if (shouldStackSubQuestions(it, currentAnswer)) {
-                stackQuestions(it)
+
+    private fun select(questionId: Long): Boolean {
+        while (!questionStack.isEmpty()) {
+            val question = questionStack.peek()
+            if (question.id == questionId) {
+                currentQuestion = question
+                return true
+            }
+            questionStack.pop()
+            question.container?.run {
+                stackQuestions(subQuestions)
             }
         }
-        if (questionStack.isEmpty()) {
-            currentContainer = null
-            return null
-        }
-        currentContainer = questionStack.peek().container
-        return questionStack.pop()
-    }
-
-    private fun select(questionId: Long) {
-        if (questionStack.isEmpty()) {
-            stackQuestions(survey.questions)
-            return
-        }
-        currentContainer?.let {
-            stackQuestions(it)
-        }
-        if (questionStack.peek().id == questionId) {
-            return
-        } else {
-            currentContainer = questionStack.pop().container
-        }
-        return select(questionId)
+        //not found reset the stack to initial
+        stackQuestions(survey.questions)
+        return false
     }
 }
